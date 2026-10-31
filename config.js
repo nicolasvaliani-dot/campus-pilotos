@@ -20,6 +20,6 @@
    ============================================================ */
 window.CAMPUS_CONFIG = {
   NOMBRE: "Campus Piloto Privado",
-  SUPABASE_URL: "",       // ejemplo: "https://abcdxyzcompany.supabase.co"
-  SUPABASE_ANON_KEY: ""   // ejemplo: "eyJhbGciOi..."  (o "sb_publishable_...")
+  SUPABASE_URL: "https://qxhdktuuvmjvojfdkwcs.supabase.co",       // ejemplo: "https://abcdxyzcompany.supabase.co"
+  SUPABASE_ANON_KEY: "sb_publishable_RZrRtITKFEQR2hnDLdvzxQ_Dj56eZDt"   // ejemplo: "eyJhbGciOi..."  (o "sb_publishable_...")
 };
