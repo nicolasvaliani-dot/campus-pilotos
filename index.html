@@ -1,8 +1,1213 @@
-x<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="es">
-<head><meta charset="UTF-8"><title>Campus Pilotos</title></head>
-<body style="font-family:sans-serif;text-align:center;margin-top:80px">
-  <h1>✈️ Campus Virtual de Pilotos</h1>
-  <p>Si ves esto, GitHub y Vercel están conectados.</p>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Campus Piloto Privado</title>
+<meta name="description" content="Campus virtual para la formación teórica de piloto privado.">
+<meta name="theme-color" content="#0d2137">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+/* ============================================================
+   CAMPUS PILOTO PRIVADO · estilos
+   Inspirado en las cartas de navegación: papel gris azulado,
+   tinta azul marino, azul carta y magenta de aeródromo.
+   ============================================================ */
+:root{
+  --paper:#eef2f5; --surface:#ffffff; --ink:#0d2137; --ink2:#4a6078; --ink3:#7c90a6;
+  --line:#d3dde7; --line2:#b9c8d8; --navy:#0d2137; --navy2:#16304d; --navy3:#24456b;
+  --blue:#1b5fa7; --blue-soft:#e3eef9; --magenta:#b3236b; --magenta-soft:#f8e6f0;
+  --green:#1f8a5b; --green-soft:#e1f3ea; --red:#c4373f; --red-soft:#fbe7e8; --amber:#b9770e; --amber-soft:#fbf0dc;
+  --r:12px; --r-sm:8px;
+  --display:'Barlow Condensed','Arial Narrow',system-ui,sans-serif;
+  --body:'IBM Plex Sans',system-ui,-apple-system,'Segoe UI',sans-serif;
+}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;min-height:100vh;font-family:var(--body);font-size:16px;line-height:1.55;color:var(--ink);background:var(--paper);-webkit-font-smoothing:antialiased}
+h1,h2,h3,h4{font-family:var(--display);font-weight:600;line-height:1.08;margin:0;letter-spacing:.01em}
+h1{font-size:2.5rem} h2{font-size:1.7rem} h3{font-size:1.3rem}
+p{margin:0 0 1em}
+a{color:var(--blue);text-decoration:none}
+a:hover{text-decoration:underline}
+button,input,select,textarea{font:inherit;color:inherit}
+:focus-visible{outline:3px solid var(--blue);outline-offset:2px;border-radius:4px}
+.muted{color:var(--ink2)}
+.small{font-size:.875rem}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}
+
+/* ---------- Botones y formularios ---------- */
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:.5rem;min-height:42px;padding:.55rem 1.1rem;border-radius:var(--r-sm);border:1px solid transparent;font-weight:500;cursor:pointer;text-decoration:none;transition:background .15s,border-color .15s,color .15s;white-space:nowrap}
+.btn:hover{text-decoration:none}
+.btn:disabled{opacity:.55;cursor:wait}
+.btn-primary{background:var(--blue);color:#fff}
+.btn-primary:hover{background:#154c87}
+.btn-ghost{background:var(--surface);border-color:var(--line2);color:var(--ink)}
+.btn-ghost:hover{border-color:var(--ink2);background:#f7f9fb}
+.btn-danger{background:var(--surface);border-color:#e6b8bb;color:var(--red)}
+.btn-danger:hover{background:var(--red-soft)}
+.btn-sm{min-height:34px;padding:.3rem .75rem;font-size:.9rem}
+.btn-block{width:100%}
+.icon-btn{display:inline-flex;align-items:center;justify-content:center;width:34px;height:34px;border-radius:var(--r-sm);border:1px solid var(--line2);background:var(--surface);cursor:pointer;color:var(--ink2)}
+.icon-btn:hover{color:var(--ink);border-color:var(--ink2)}
+.icon-btn.danger:hover{color:var(--red);border-color:var(--red)}
+.icon-btn:disabled{opacity:.35;cursor:default}
+.ico{width:20px;height:20px;flex:none}
+.field{display:block;margin-bottom:1rem}
+.field>span{display:block;font-weight:500;font-size:.9rem;margin-bottom:.3rem}
+.field small{display:block;color:var(--ink2);margin-top:.25rem}
+.input,select.input,textarea.input{width:100%;padding:.6rem .8rem;border:1px solid var(--line2);border-radius:var(--r-sm);background:#fff;min-height:44px}
+textarea.input{min-height:140px;resize:vertical}
+.input:hover{border-color:var(--ink3)}
+.input:focus{outline:none;border-color:var(--blue);box-shadow:0 0 0 3px rgba(27,95,167,.2)}
+.input:disabled{background:#f2f5f8;color:var(--ink2)}
+.check{display:flex;gap:.6rem;align-items:center;margin-bottom:1rem;cursor:pointer}
+.check input{width:20px;height:20px;accent-color:var(--blue)}
+.row{display:grid;grid-template-columns:1fr 1fr;gap:0 1rem}
+.link-btn{background:none;border:0;padding:0;color:var(--blue);cursor:pointer;font-weight:500}
+.link-btn:hover{text-decoration:underline}
+
+/* ---------- Etiquetas y barras ---------- */
+.badge{display:inline-block;padding:.1rem .6rem;border-radius:99px;font-size:.8rem;font-weight:500;background:var(--blue-soft);color:var(--blue);white-space:nowrap}
+.badge.draft{background:var(--amber-soft);color:var(--amber)}
+.badge.ok{background:var(--green-soft);color:var(--green)}
+.badge.admin{background:var(--magenta-soft);color:var(--magenta)}
+.bar{height:8px;border-radius:99px;background:#dfe7ef;overflow:hidden}
+.bar>i{display:block;height:100%;background:var(--magenta);border-radius:99px}
+.bar.done>i{background:var(--green)}
+
+/* ---------- Avisos ---------- */
+.notice{padding:.8rem 1rem;border-radius:var(--r-sm);background:var(--blue-soft);color:#12426f;margin-bottom:1rem;font-size:.95rem}
+.notice.warn{background:var(--amber-soft);color:#6e4508}
+.notice.ok{background:var(--green-soft);color:#14583a}
+#toasts{position:fixed;right:16px;bottom:16px;z-index:100;display:grid;gap:8px;max-width:calc(100vw - 32px)}
+.toast{padding:.7rem 1rem;border-radius:var(--r-sm);background:var(--navy);color:#fff;box-shadow:0 8px 24px rgba(13,33,55,.28);animation:tin .2s ease-out}
+.toast.err{background:var(--red)} .toast.ok{background:var(--green)}
+.toast.out{opacity:0;transition:opacity .4s}
+@keyframes tin{from{transform:translateY(8px);opacity:0}to{transform:none;opacity:1}}
+
+/* ---------- Pantalla de acceso ---------- */
+.auth{min-height:100vh;display:grid;grid-template-columns:minmax(0,1.05fr) minmax(0,1fr)}
+.auth-hero{position:relative;background:var(--navy);color:#fff;padding:3rem 3.5rem;display:flex;flex-direction:column;justify-content:space-between;overflow:hidden}
+.auth-hero::before{content:"";position:absolute;inset:0;background:
+  repeating-linear-gradient(0deg,rgba(255,255,255,.06) 0 1px,transparent 1px 64px),
+  repeating-linear-gradient(90deg,rgba(255,255,255,.06) 0 1px,transparent 1px 64px)}
+.auth-hero>*{position:relative}
+.compass{position:absolute!important;right:-120px;bottom:-120px;width:560px;height:560px;opacity:.9}
+.brand{display:flex;align-items:center;gap:.7rem;font-family:var(--display);font-size:1.5rem;font-weight:600;letter-spacing:.02em}
+.brand svg{width:34px;height:34px}
+.hero-copy{max-width:30rem;margin:4rem 0}
+.hero-copy h1{font-size:3.6rem;font-weight:700;margin-bottom:1rem}
+.hero-copy p{font-size:1.1rem;color:#b9cadd}
+.hero-foot{font-size:.9rem;color:#8ea6c0}
+.auth-main{display:flex;align-items:center;justify-content:center;padding:2rem 1.25rem}
+.auth-card{width:100%;max-width:420px}
+.auth-card h2{font-size:2.2rem;margin-bottom:.35rem}
+.auth-card .lead{color:var(--ink2);margin-bottom:1.5rem}
+.auth-links{display:flex;justify-content:space-between;gap:1rem;margin:1rem 0 0;font-size:.95rem;flex-wrap:wrap}
+.demo-box{margin-top:1.75rem;padding:1rem;border:1px dashed var(--line2);border-radius:var(--r);background:#f7f9fb}
+.demo-box p{margin:0 0 .75rem;font-size:.9rem;color:var(--ink2)}
+.demo-box .btns{display:flex;gap:.5rem;flex-wrap:wrap}
+
+/* ---------- Estructura de la app ---------- */
+.app{display:grid;grid-template-columns:260px minmax(0,1fr);min-height:100vh}
+.sidebar{position:sticky;top:0;height:100vh;background:var(--navy);color:#dbe6f2;display:flex;flex-direction:column;padding:1.25rem .9rem;overflow-y:auto}
+.sidebar .brand{color:#fff;padding:.25rem .5rem 1.25rem}
+.nav{display:grid;gap:2px;flex:1;align-content:start}
+.nav-item{display:flex;align-items:center;gap:.75rem;padding:.6rem .75rem;border-radius:var(--r-sm);color:#c3d3e4;font-weight:500;text-decoration:none}
+.nav-item:hover{background:var(--navy2);color:#fff;text-decoration:none}
+.nav-item.active{background:#fff;color:var(--navy)}
+.nav-item .soon{margin-left:auto;font-style:normal;font-size:.72rem;padding:.05rem .45rem;border-radius:99px;background:var(--navy3);color:#cfe0f2}
+.nav-sep{margin:1rem .75rem .35rem;font-size:.82rem;color:#8ea6c0}
+.me{border-top:1px solid var(--navy3);padding-top:1rem;margin-top:1rem;display:grid;gap:.6rem}
+.me b{display:block;color:#fff;font-weight:500;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.me span{font-size:.85rem;color:#8ea6c0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;display:block}
+.me .btn{background:transparent;border-color:var(--navy3);color:#dbe6f2;min-height:38px}
+.me .btn:hover{background:var(--navy2)}
+.main{padding:2rem 2.5rem 4rem;max-width:1180px;width:100%}
+.topbar{display:none}
+.scrim{display:none}
+.demo-banner{background:var(--amber-soft);color:#6e4508;font-size:.9rem;padding:.5rem 1rem;text-align:center;border-bottom:1px solid #ecd9b0}
+.page-head{display:flex;align-items:flex-end;justify-content:space-between;gap:1rem;flex-wrap:wrap;margin-bottom:1.75rem}
+.page-head p{margin:.35rem 0 0;color:var(--ink2)}
+.crumbs{margin-bottom:1rem;font-size:.95rem}
+
+/* ---------- Tarjetas y grillas ---------- */
+.card{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:1.25rem}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:1.1rem}
+.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:1rem;margin-bottom:2rem}
+.stat{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:1rem 1.25rem}
+.stat b{display:block;font-family:var(--display);font-size:2.6rem;font-weight:600;line-height:1;margin-bottom:.25rem}
+.stat span{color:var(--ink2);font-size:.92rem}
+.section{margin-top:2.25rem}
+.section>h2{margin-bottom:1rem}
+.course{display:flex;flex-direction:column;gap:.75rem;background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:1.25rem;transition:border-color .15s,box-shadow .15s;color:inherit;text-decoration:none}
+.course:hover{border-color:var(--blue);box-shadow:0 6px 20px rgba(13,33,55,.08);text-decoration:none}
+.course h3{font-size:1.5rem}
+.course p{color:var(--ink2);margin:0;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden;font-size:.95rem}
+.course .meta{display:flex;gap:.5rem;align-items:center;flex-wrap:wrap}
+.course .foot{margin-top:auto;padding-top:.5rem}
+.course .foot small{display:flex;justify-content:space-between;color:var(--ink2);margin-bottom:.35rem}
+.resume{display:grid;grid-template-columns:1fr auto;gap:1.25rem;align-items:center;background:var(--navy);color:#fff;border-radius:var(--r);padding:1.5rem 1.75rem}
+.resume h2{font-size:2rem;margin:.2rem 0 .3rem}
+.resume p{color:#b9cadd;margin:0}
+.resume small{color:#8ea6c0}
+.resume .btn-primary{background:#fff;color:var(--navy)}
+.resume .btn-primary:hover{background:#e6eef7}
+.soon-list{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:1rem}
+.soon-list .card{border-style:dashed;background:transparent}
+.soon-list h3{font-size:1.2rem;margin-bottom:.25rem}
+.soon-list p{margin:0;color:var(--ink2);font-size:.92rem}
+.empty{text-align:center;padding:3rem 1.5rem;border:1px dashed var(--line2);border-radius:var(--r);background:rgba(255,255,255,.5)}
+.empty h3{margin-bottom:.4rem}
+.empty p{color:var(--ink2);max-width:34rem;margin:0 auto 1.25rem}
+.toolbar{display:flex;gap:.75rem;margin-bottom:1.25rem;flex-wrap:wrap}
+.toolbar .input{max-width:360px}
+
+/* ---------- Curso y lección ---------- */
+.course-head{display:grid;grid-template-columns:minmax(0,1fr) 280px;gap:2rem;align-items:start}
+.course-head .card h3{margin-bottom:.6rem}
+.lesson-list{list-style:none;margin:0;padding:0;display:grid;gap:.5rem}
+.lesson-list a{display:flex;gap:.9rem;align-items:center;padding:.8rem 1rem;background:var(--surface);border:1px solid var(--line);border-radius:var(--r-sm);color:inherit;text-decoration:none}
+.lesson-list a:hover{border-color:var(--blue);text-decoration:none}
+.lesson-list a.current{border-color:var(--magenta);background:var(--magenta-soft)}
+.lesson-list .n{flex:none;width:32px;height:32px;border-radius:50%;border:1.5px solid var(--line2);display:grid;place-items:center;font-weight:600;font-size:.9rem;color:var(--ink2)}
+.lesson-list .done .n{background:var(--green);border-color:var(--green);color:#fff}
+.lesson-list .t{flex:1;min-width:0}
+.lesson-list .t small{display:block;color:var(--ink2)}
+.lesson-layout{display:grid;grid-template-columns:minmax(0,1fr) 320px;gap:2rem;align-items:start}
+.video{position:relative;aspect-ratio:16/9;background:#000;border-radius:var(--r);overflow:hidden;margin-bottom:1.25rem}
+.video iframe,.video video{position:absolute;inset:0;width:100%;height:100%;border:0}
+.video-ph{display:grid;place-items:center;aspect-ratio:16/9;background:var(--navy);color:#b9cadd;border-radius:var(--r);margin-bottom:1.25rem;text-align:center;padding:1rem}
+.video-ph a{color:#fff}
+.lesson-head{display:flex;justify-content:space-between;align-items:flex-start;gap:1rem;flex-wrap:wrap;margin-bottom:1.25rem}
+.lesson-head h1{font-size:2.2rem}
+.lesson-head .k{color:var(--magenta);font-weight:500;font-size:.95rem}
+.prose{max-width:68ch;font-size:1.05rem}
+.prose p{margin-bottom:1.1em}
+.pager{display:flex;justify-content:space-between;gap:1rem;margin-top:2rem;padding-top:1.25rem;border-top:1px solid var(--line);flex-wrap:wrap}
+.side-list h3{margin-bottom:.75rem}
+.side-list .lesson-list a{padding:.6rem .75rem}
+
+/* ---------- Tablas ---------- */
+.table-wrap{overflow-x:auto;background:var(--surface);border:1px solid var(--line);border-radius:var(--r)}
+table{width:100%;border-collapse:collapse;min-width:640px}
+th,td{text-align:left;padding:.75rem 1rem;border-bottom:1px solid var(--line);vertical-align:middle}
+th{font-weight:600;font-size:.88rem;color:var(--ink2);background:#f6f9fb}
+tr:last-child td{border-bottom:0}
+td .acts{display:flex;gap:.4rem;justify-content:flex-end}
+.tabs{display:flex;gap:.25rem;border-bottom:1px solid var(--line2);margin-bottom:1.5rem;overflow-x:auto}
+.tabs a{padding:.6rem 1.1rem;color:var(--ink2);font-weight:500;border-bottom:3px solid transparent;margin-bottom:-1px;white-space:nowrap}
+.tabs a:hover{color:var(--ink);text-decoration:none}
+.tabs a.active{color:var(--ink);border-bottom-color:var(--magenta)}
+
+/* ---------- Ventana modal ---------- */
+dialog{border:0;border-radius:var(--r);padding:0;width:min(560px,calc(100vw - 24px));max-height:calc(100vh - 24px);box-shadow:0 24px 70px rgba(13,33,55,.4);color:var(--ink)}
+dialog::backdrop{background:rgba(13,33,55,.6)}
+.modal-box{padding:1.5rem}
+.modal-box h3{font-size:1.7rem;margin-bottom:1.1rem}
+.modal-actions{display:flex;justify-content:flex-end;gap:.6rem;margin-top:.5rem}
+
+/* ---------- Carga y errores ---------- */
+.center{min-height:100vh;display:grid;place-items:center;padding:2rem;text-align:center}
+.spinner{width:42px;height:42px;border-radius:50%;border:4px solid var(--line2);border-top-color:var(--blue);animation:spin 1s linear infinite;margin:0 auto 1rem}
+@keyframes spin{to{transform:rotate(360deg)}}
+.fatal{max-width:520px}
+.fatal code{display:block;margin:1rem 0;padding:.75rem 1rem;background:#fff;border:1px solid var(--line);border-radius:var(--r-sm);text-align:left;font-size:.9rem;word-break:break-word}
+
+/* ---------- Adaptación a pantallas chicas ---------- */
+@media (max-width:980px){
+  .course-head,.lesson-layout{grid-template-columns:1fr}
+  .main{padding:1.5rem 1.25rem 3rem}
+}
+@media (max-width:880px){
+  .auth{grid-template-columns:1fr}
+  .auth-hero{padding:1.5rem 1.5rem 2rem}
+  .hero-copy{margin:1.5rem 0 .5rem}
+  .hero-copy h1{font-size:2.6rem}
+  .hero-foot,.compass{display:none}
+  .app{grid-template-columns:1fr}
+  .sidebar{position:fixed;z-index:60;left:0;top:0;width:280px;transform:translateX(-100%);transition:transform .2s}
+  .sidebar.open{transform:none}
+  .scrim.show{display:block;position:fixed;inset:0;background:rgba(13,33,55,.55);z-index:50}
+  .topbar{display:flex;align-items:center;gap:.75rem;padding:.6rem 1rem;background:var(--navy);color:#fff;position:sticky;top:0;z-index:40}
+  .topbar .brand{font-size:1.25rem}
+  .topbar .icon-btn{background:transparent;border-color:var(--navy3);color:#fff}
+  .resume{grid-template-columns:1fr}
+  h1{font-size:2.1rem}
+  .row{grid-template-columns:1fr}
+}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+</style>
+</head>
+<body>
+<div id="app"></div>
+<dialog id="modal" aria-label="Formulario"></dialog>
+<div id="toasts" role="status" aria-live="polite"></div>
+
+<!-- Configuración (Supabase). Si está vacía, la página corre en MODO DEMO. -->
+<script src="config.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
+
+<script>
+(() => {
+'use strict';
+
+/* ============================================================
+   1) CONFIGURACIÓN Y UTILIDADES
+   ============================================================ */
+const CFG  = window.CAMPUS_CONFIG || {};
+const NAME = CFG.NOMBRE || 'Campus Piloto Privado';
+const WANTS_LIVE = !!(CFG.SUPABASE_URL && CFG.SUPABASE_ANON_KEY);
+const LIVE = WANTS_LIVE && !!window.supabase;
+
+const $  = (s, r = document) => r.querySelector(s);
+const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const uid = () => (window.crypto && crypto.randomUUID) ? crypto.randomUUID() : 'id-' + Date.now().toString(36) + Math.random().toString(16).slice(2);
+const fmtDate = d => d ? new Date(d).toLocaleDateString('es-AR', {day:'2-digit', month:'short', year:'numeric'}) : '—';
+const firstName = n => (n || '').trim().split(/\s+/)[0] || 'piloto';
+const richText = t => !t ? '' : esc(t).split(/\n{2,}/).map(p => `<p>${p.replace(/\n/g, '<br>')}</p>`).join('');
+const plural = (n, a, b) => n === 1 ? a : b;
+
+const STAGES = ['Aspirante', 'Teórico en curso', 'Instrucción de vuelo', 'Preparando examen', 'Piloto privado'];
+const LEVELS = ['Básico', 'Intermedio', 'Avanzado'];
+
+function toast(msg, type = 'info') {
+  const t = document.createElement('div');
+  t.className = 'toast ' + type;
+  t.textContent = msg;
+  $('#toasts').appendChild(t);
+  setTimeout(() => t.classList.add('out'), 3800);
+  setTimeout(() => t.remove(), 4300);
+}
+
+function humanError(e) {
+  const m = (e && e.message) || String(e);
+  const map = [
+    [/invalid login credentials/i, 'Email o contraseña incorrectos.'],
+    [/email not confirmed/i, 'Todavía no confirmaste tu email. Revisá tu bandeja de entrada.'],
+    [/already registered|already been registered/i, 'Ese email ya tiene una cuenta. Probá iniciar sesión.'],
+    [/rate limit|too many/i, 'Demasiados intentos seguidos. Esperá un momento y probá de nuevo.'],
+    [/password should be|at least \d+ char/i, 'La contraseña es muy corta.'],
+    [/failed to fetch|network/i, 'No hay conexión con el servidor. Revisá tu internet.'],
+    [/row-level security|permission denied/i, 'No tenés permisos para hacer esto.'],
+    [/same password/i, 'La nueva contraseña tiene que ser distinta de la actual.'],
+  ];
+  for (const [re, txt] of map) if (re.test(m)) return txt;
+  return m;
+}
+
+const ICONS = {
+  home:'M3 11l9-8 9 8v9a1 1 0 0 1-1 1h-5v-6H9v6H4a1 1 0 0 1-1-1z',
+  book:'M4 5a2 2 0 0 1 2-2h13v16H6a2 2 0 0 0-2 2zM4 19a2 2 0 0 1 2-2h13',
+  grid:'M4 4h7v7H4zM13 4h7v7h-7zM4 13h7v7H4zM13 13h7v7h-7z',
+  check:'M9 11l3 3 8-8M20 12v7a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V7a2 2 0 0 1 2-2h9',
+  folder:'M3 6a2 2 0 0 1 2-2h4l2 3h8a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z',
+  cal:'M4 6a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v13a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2zM4 10h16M8 2v4M16 2v4',
+  user:'M12 12a4 4 0 1 0 0-8 4 4 0 0 0 0 8zM4 21a8 8 0 0 1 16 0',
+  shield:'M12 3l8 3v6c0 5-3.5 8-8 9-4.5-1-8-4-8-9V6z',
+  logout:'M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4M16 17l5-5-5-5M21 12H9',
+  menu:'M4 6h16M4 12h16M4 18h16',
+  plus:'M12 5v14M5 12h14',
+  edit:'M4 20h4L19 9l-4-4L4 16zM14 6l4 4',
+  trash:'M4 7h16M10 11v6M14 11v6M6 7l1 13h10l1-13M9 7V4h6v3',
+  up:'M6 15l6-6 6 6',
+  down:'M6 9l6 6 6-6',
+};
+const icon = n => `<svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="${ICONS[n] || ''}"/></svg>`;
+
+const LOGO = `<svg viewBox="0 0 40 40" fill="none" aria-hidden="true"><circle cx="20" cy="20" r="17" stroke="#fff" stroke-width="2"/><path d="M20 7l4.2 13.5L20 33l-4.2-12.5z" fill="#b3236b"/><path d="M20 7l-4.2 13.5L20 33" stroke="#fff" stroke-width="1.5" fill="none"/><circle cx="20" cy="20" r="2.2" fill="#fff"/></svg>`;
+
+function compassSvg() {
+  let t = '';
+  for (let a = 0; a < 360; a += 5) {
+    const major = a % 30 === 0, mid = a % 10 === 0;
+    const r1 = 250, r2 = major ? 222 : mid ? 234 : 242;
+    const rad = (a - 90) * Math.PI / 180;
+    t += `<line x1="${(300 + r1 * Math.cos(rad)).toFixed(1)}" y1="${(300 + r1 * Math.sin(rad)).toFixed(1)}" x2="${(300 + r2 * Math.cos(rad)).toFixed(1)}" y2="${(300 + r2 * Math.sin(rad)).toFixed(1)}" stroke="#fff" stroke-opacity="${major ? .55 : .28}" stroke-width="${major ? 2 : 1}"/>`;
+  }
+  const lab = (txt, x, y) => `<text x="${x}" y="${y}" fill="#fff" fill-opacity=".7" font-family="Barlow Condensed,sans-serif" font-size="30" font-weight="600" text-anchor="middle">${txt}</text>`;
+  return `<svg class="compass" viewBox="0 0 600 600" aria-hidden="true"><circle cx="300" cy="300" r="256" fill="none" stroke="#fff" stroke-opacity=".35" stroke-width="2"/>${t}<circle cx="300" cy="300" r="170" fill="none" stroke="#fff" stroke-opacity=".15"/>${lab('N',300,196)}${lab('E',404,311)}${lab('S',300,426)}${lab('O',196,311)}<path d="M300 118l14 182-14 182-14-182z" fill="#b3236b" fill-opacity=".85"/><circle cx="300" cy="300" r="6" fill="#fff"/></svg>`;
+}
+
+/* ============================================================
+   2) CAPA DE DATOS
+   Dos "motores" con la misma interfaz:
+   - SB: Supabase real (cuando config.js está completo)
+   - DM: modo demo, guarda todo en el navegador (localStorage)
+   ============================================================ */
+
+/* ---- Contenido de ejemplo (el mismo que carga el SQL) ---- */
+const SAMPLE = [
+  { title:'Reglamento aeronáutico', level:'Básico', description:'Marco normativo de la aviación civil, licencias, habilitaciones y reglas del aire.', lessons:[
+    ['Introducción al marco normativo', 'Contenido de ejemplo. Acá va el texto de la lección: qué organismos regulan la actividad aérea y cómo se ordena la normativa.'],
+    ['Licencias y habilitaciones', 'Contenido de ejemplo. Requisitos para obtener y mantener la licencia de piloto privado.'],
+    ['Reglas del aire: conceptos básicos', 'Contenido de ejemplo. Prioridades de paso, alturas mínimas y reglas generales de vuelo.'] ]},
+  { title:'Meteorología para pilotos', level:'Básico', description:'La atmósfera, los fenómenos que afectan al vuelo y cómo leer los informes meteorológicos.', lessons:[
+    ['La atmósfera estándar', 'Contenido de ejemplo. Capas de la atmósfera y valores de la atmósfera estándar.'],
+    ['Viento, presión y temperatura', 'Contenido de ejemplo. Cómo se relacionan estas tres variables y qué efectos tienen en el vuelo.'],
+    ['Nubes y fenómenos peligrosos', 'Contenido de ejemplo. Tipos de nubes, tormentas, engelamiento y turbulencia.'],
+    ['Lectura de METAR y TAF', 'Contenido de ejemplo. Cómo decodificar los informes de observación y pronóstico de aeródromo.'] ]},
+  { title:'Navegación aérea', level:'Intermedio', description:'Cartas, rumbos, navegación estimada y uso de radioayudas.', lessons:[
+    ['Cartas, rumbos y derrota', 'Contenido de ejemplo. Lectura de cartas y trazado de una derrota.'],
+    ['Navegación estimada', 'Contenido de ejemplo. Cálculo de tiempos, velocidades y combustible.'],
+    ['Radioayudas (VOR y NDB)', 'Contenido de ejemplo. Principios de funcionamiento y uso básico.'] ]},
+  { title:'Aerodinámica y performance', level:'Intermedio', description:'Fuerzas sobre la aeronave, pérdida, peso y balanceo.', lessons:[
+    ['Las cuatro fuerzas', 'Contenido de ejemplo. Sustentación, peso, tracción y resistencia.'],
+    ['Pérdida y barrena', 'Contenido de ejemplo. Qué las provoca y cómo se previenen y recuperan.'],
+    ['Peso y balanceo', 'Contenido de ejemplo. Cálculo del centro de gravedad y límites de carga.'] ]},
+];
+
+/* ---- Motor SUPABASE ---- */
+function makeSB() {
+  const sb = window.supabase.createClient(CFG.SUPABASE_URL, CFG.SUPABASE_ANON_KEY, {
+    auth: { persistSession: true, autoRefreshToken: true, detectSessionInUrl: true }
+  });
+  const ok = ({ data, error }) => { if (error) throw error; return data; };
+  const back = location.origin + location.pathname;
+  return {
+    onAuth(cb) { sb.auth.onAuthStateChange((ev, s) => cb(ev, s ? s.user : null)); },
+    start() {},
+    async signIn(email, password) { ok(await sb.auth.signInWithPassword({ email, password })); },
+    async signUp(email, password, name) {
+      const d = ok(await sb.auth.signUp({ email, password, options: { data: { full_name: name }, emailRedirectTo: back } }));
+      return { needsConfirm: !d.session };
+    },
+    async signOut() { await sb.auth.signOut(); },
+    async resetPassword(email) { ok(await sb.auth.resetPasswordForEmail(email, { redirectTo: back })); },
+    async updatePassword(pw) { ok(await sb.auth.updateUser({ password: pw })); },
+    async profile(id) { return ok(await sb.from('profiles').select('*').eq('id', id).single()); },
+    async saveProfile(id, patch) { return ok(await sb.from('profiles').update(patch).eq('id', id).select().single()); },
+    async courses() { return ok(await sb.from('courses').select('*').order('created_at')); },
+    async saveCourse(c) {
+      const { id, ...f } = c;
+      return id ? ok(await sb.from('courses').update(f).eq('id', id).select().single())
+                : ok(await sb.from('courses').insert(f).select().single());
+    },
+    async deleteCourse(id) { ok(await sb.from('courses').delete().eq('id', id)); },
+    async lessons() { return ok(await sb.from('lessons').select('*').order('position')); },
+    async saveLesson(l) {
+      const { id, ...f } = l;
+      return id ? ok(await sb.from('lessons').update(f).eq('id', id).select().single())
+                : ok(await sb.from('lessons').insert(f).select().single());
+    },
+    async deleteLesson(id) { ok(await sb.from('lessons').delete().eq('id', id)); },
+    async myEnrollments(uid_) { return ok(await sb.from('enrollments').select('course_id').eq('user_id', uid_)).map(r => r.course_id); },
+    async enroll(uid_, cid) { ok(await sb.from('enrollments').insert({ user_id: uid_, course_id: cid })); },
+    async unenroll(uid_, cid) { ok(await sb.from('enrollments').delete().eq('user_id', uid_).eq('course_id', cid)); },
+    async myProgress(uid_) { return ok(await sb.from('lesson_progress').select('lesson_id').eq('user_id', uid_)).map(r => r.lesson_id); },
+    async setProgress(uid_, lid, done) {
+      if (done) ok(await sb.from('lesson_progress').upsert({ user_id: uid_, lesson_id: lid }));
+      else ok(await sb.from('lesson_progress').delete().eq('user_id', uid_).eq('lesson_id', lid));
+    },
+    // Solo administradores (la base de datos lo hace cumplir con RLS)
+    async allProfiles() { return ok(await sb.from('profiles').select('*').order('created_at', { ascending: false })); },
+    async allEnrollments() { return ok(await sb.from('enrollments').select('user_id,course_id')); },
+    async allProgress() { return ok(await sb.from('lesson_progress').select('user_id,lesson_id')); },
+    async setRole(id, role) { ok(await sb.from('profiles').update({ role }).eq('id', id)); },
+  };
+}
+
+/* ---- Motor DEMO (todo queda en este navegador) ---- */
+function makeDM() {
+  const KEY = 'campus_demo_v1';
+  let cb = null, db = null;
+  const persist = () => { try { localStorage.setItem(KEY, JSON.stringify(db)); } catch (e) { /* sin almacenamiento */ } };
+  function seed() {
+    const d = { users: [], session: null, courses: [], lessons: [], enrollments: [], progress: [] };
+    const now = new Date().toISOString();
+    d.users.push({ id: uid(), email: 'admin@demo.com', password: 'demo1234', full_name: 'Admin Demo', aeroclub: 'Aeroclub Demo', etapa: 'Piloto privado', role: 'admin', created_at: now });
+    d.users.push({ id: uid(), email: 'alumno@demo.com', password: 'demo1234', full_name: 'Alumno Demo', aeroclub: '', etapa: 'Teórico en curso', role: 'student', created_at: now });
+    SAMPLE.forEach((c, ci) => {
+      const id = uid();
+      d.courses.push({ id, title: c.title, description: c.description, level: c.level, published: true, created_at: new Date(Date.now() + ci).toISOString() });
+      c.lessons.forEach((l, i) => d.lessons.push({ id: uid(), course_id: id, title: l[0], content: l[1], video_url: '', duration_min: 10 + i * 5, position: i + 1, created_at: now }));
+    });
+    return d;
+  }
+  const get = () => {
+    if (db) return db;
+    try { const raw = JSON.parse(localStorage.getItem(KEY)); if (raw && raw.users) db = raw; } catch (e) { /* ignorar */ }
+    if (!db) { db = seed(); persist(); }
+    return db;
+  };
+  const me = () => { const d = get(); return d.users.find(u => u.id === d.session) || null; };
+  const pub = u => { if (!u) return null; const { password, ...r } = u; return r; };
+  const authUser = u => ({ id: u.id, email: u.email });
+  const needAdmin = () => { const u = me(); if (!u || u.role !== 'admin') throw new Error('No tenés permisos para hacer esto.'); };
+  const visibleCourses = () => { const d = get(), u = me(); return d.courses.filter(c => c.published || (u && u.role === 'admin')); };
+  const fire = (ev, u) => cb && cb(ev, u ? authUser(u) : null);
+
+  return {
+    onAuth(f) { cb = f; },
+    start() { fire('INITIAL_SESSION', me()); },
+    async signIn(email, password) {
+      const u = get().users.find(x => x.email.toLowerCase() === email.toLowerCase() && x.password === password);
+      if (!u) throw new Error('Invalid login credentials');
+      get().session = u.id; persist(); fire('SIGNED_IN', u);
+    },
+    async demoLogin(role) {
+      const u = get().users.find(x => x.role === role);
+      get().session = u.id; persist(); fire('SIGNED_IN', u);
+    },
+    async signUp(email, password, name) {
+      const d = get();
+      if (d.users.some(x => x.email.toLowerCase() === email.toLowerCase())) throw new Error('User already registered');
+      const u = { id: uid(), email, password, full_name: name, aeroclub: '', etapa: 'Aspirante', role: 'student', created_at: new Date().toISOString() };
+      d.users.push(u); d.session = u.id; persist(); fire('SIGNED_IN', u);
+      return { needsConfirm: false };
+    },
+    async signOut() { get().session = null; persist(); fire('SIGNED_OUT', null); },
+    async resetPassword() { /* en demo no se envía ningún email */ },
+    async updatePassword(pw) { me().password = pw; persist(); },
+    async profile(id) { return pub(get().users.find(u => u.id === id)); },
+    async saveProfile(id, patch) {
+      const u = get().users.find(x => x.id === id);
+      ['full_name', 'aeroclub', 'etapa'].forEach(k => { if (k in patch) u[k] = patch[k]; });
+      persist(); return pub(u);
+    },
+    async courses() { return visibleCourses().slice(); },
+    async saveCourse(c) {
+      needAdmin(); const d = get();
+      if (c.id) { const x = d.courses.find(k => k.id === c.id); Object.assign(x, c); persist(); return x; }
+      const x = { ...c, id: uid(), created_at: new Date().toISOString() }; d.courses.push(x); persist(); return x;
+    },
+    async deleteCourse(id) {
+      needAdmin(); const d = get();
+      const lids = d.lessons.filter(l => l.course_id === id).map(l => l.id);
+      d.courses = d.courses.filter(c => c.id !== id);
+      d.lessons = d.lessons.filter(l => l.course_id !== id);
+      d.enrollments = d.enrollments.filter(e => e.course_id !== id);
+      d.progress = d.progress.filter(p => !lids.includes(p.lesson_id)); persist();
+    },
+    async lessons() { const ids = new Set(visibleCourses().map(c => c.id)); return get().lessons.filter(l => ids.has(l.course_id)); },
+    async saveLesson(l) {
+      needAdmin(); const d = get();
+      if (l.id) { const x = d.lessons.find(k => k.id === l.id); Object.assign(x, l); persist(); return x; }
+      const x = { ...l, id: uid(), created_at: new Date().toISOString() }; d.lessons.push(x); persist(); return x;
+    },
+    async deleteLesson(id) {
+      needAdmin(); const d = get();
+      d.lessons = d.lessons.filter(l => l.id !== id); d.progress = d.progress.filter(p => p.lesson_id !== id); persist();
+    },
+    async myEnrollments(u) { return get().enrollments.filter(e => e.user_id === u).map(e => e.course_id); },
+    async enroll(u, cid) { const d = get(); if (!d.enrollments.some(e => e.user_id === u && e.course_id === cid)) d.enrollments.push({ user_id: u, course_id: cid }); persist(); },
+    async unenroll(u, cid) { const d = get(); d.enrollments = d.enrollments.filter(e => !(e.user_id === u && e.course_id === cid)); persist(); },
+    async myProgress(u) { return get().progress.filter(p => p.user_id === u).map(p => p.lesson_id); },
+    async setProgress(u, lid, done) {
+      const d = get(); d.progress = d.progress.filter(p => !(p.user_id === u && p.lesson_id === lid));
+      if (done) d.progress.push({ user_id: u, lesson_id: lid }); persist();
+    },
+    async allProfiles() { needAdmin(); return get().users.map(pub).sort((a, b) => b.created_at.localeCompare(a.created_at)); },
+    async allEnrollments() { needAdmin(); return get().enrollments.slice(); },
+    async allProgress() { needAdmin(); return get().progress.slice(); },
+    async setRole(id, role) { needAdmin(); get().users.find(u => u.id === id).role = role; persist(); },
+  };
+}
+
+let API = null;
+
+/* ============================================================
+   3) ESTADO
+   ============================================================ */
+const state = {
+  ready: false, fatal: null,
+  user: null, profile: null, recovery: false,
+  authMode: 'login', authEmail: '',
+  courses: [], lessons: [],
+  enrolled: new Set(), done: new Set(),
+  admin: { profiles: [], enrollments: [], progress: [] }, adminLoaded: false,
+};
+const isAdmin = () => !!(state.profile && state.profile.role === 'admin');
+const lessonsOf = cid => state.lessons.filter(l => l.course_id === cid).sort((a, b) => (a.position - b.position) || String(a.created_at).localeCompare(String(b.created_at)));
+const courseById = id => state.courses.find(c => c.id === id);
+function progressOf(cid) {
+  const ls = lessonsOf(cid), d = ls.filter(l => state.done.has(l.id)).length;
+  return { total: ls.length, done: d, pct: ls.length ? Math.round(d / ls.length * 100) : 0 };
+}
+const minutesOf = cid => lessonsOf(cid).reduce((s, l) => s + (Number(l.duration_min) || 0), 0);
+
+async function loadCatalog() {
+  const [courses, lessons] = await Promise.all([API.courses(), API.lessons()]);
+  state.courses = courses; state.lessons = lessons;
+}
+async function loadMine() {
+  const [en, pr] = await Promise.all([API.myEnrollments(state.user.id), API.myProgress(state.user.id)]);
+  state.enrolled = new Set(en); state.done = new Set(pr);
+}
+async function loadAll() {
+  state.profile = await API.profile(state.user.id);
+  await Promise.all([loadCatalog(), loadMine()]);
+  state.adminLoaded = false;
+}
+async function loadAdmin() {
+  const [profiles, enrollments, progress] = await Promise.all([API.allProfiles(), API.allEnrollments(), API.allProgress()]);
+  state.admin = { profiles, enrollments, progress }; state.adminLoaded = true;
+}
+
+/* ============================================================
+   4) RUTAS
+   #/inicio  #/cursos  #/catalogo  #/curso/ID  #/curso/ID/leccion/ID
+   #/perfil  #/admin  #/admin/cursos  #/admin/alumnos  #/admin/curso/ID
+   ============================================================ */
+function route() {
+  const h = location.hash;
+  if (!h.startsWith('#/')) return ['inicio'];
+  const parts = h.slice(2).split('?')[0].split('/').map(decodeURIComponent).filter(Boolean);
+  return parts.length ? parts : ['inicio'];
+}
+
+/* ============================================================
+   5) VIDEO
+   ============================================================ */
+function videoHtml(url) {
+  const ph = txt => `<div class="video-ph"><p>${txt}</p></div>`;
+  if (!url || !url.trim()) return ph('Esta lección todavía no tiene video.');
+  let u;
+  try { u = new URL(url.trim()); } catch (e) { return ph('El link del video no es válido.'); }
+  if (u.protocol !== 'https:') return ph('El link del video tiene que empezar con https://');
+  const host = u.hostname.replace(/^www\./, '');
+  let id = null, src = null;
+  if (host === 'youtube.com' || host === 'm.youtube.com') {
+    if (u.pathname === '/watch') id = u.searchParams.get('v');
+    else if (/^\/(embed|shorts|live)\//.test(u.pathname)) id = u.pathname.split('/')[2];
+  } else if (host === 'youtu.be') id = u.pathname.slice(1);
+  if (id && /^[\w-]{6,20}$/.test(id)) src = `https://www.youtube-nocookie.com/embed/${id}?rel=0`;
+  else if (host === 'vimeo.com') { const m = u.pathname.match(/^\/(\d+)/); if (m) src = `https://player.vimeo.com/video/${m[1]}`; }
+  else if (host === 'player.vimeo.com' || host === 'iframe.mediadelivery.net') src = u.href;
+  if (src) return `<div class="video"><iframe src="${esc(src)}" title="Video de la lección" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture; fullscreen" allowfullscreen loading="lazy" referrerpolicy="strict-origin-when-cross-origin"></iframe></div>`;
+  if (/\.(mp4|webm|ogg)$/i.test(u.pathname)) return `<div class="video"><video controls preload="metadata" src="${esc(u.href)}"></video></div>`;
+  return `<div class="video-ph"><p><a href="${esc(u.href)}" target="_blank" rel="noopener">Abrir el video en una pestaña nueva</a></p></div>`;
+}
+
+/* ============================================================
+   6) VISTAS: ACCESO
+   ============================================================ */
+function authShell(card) {
+  return `
+  <div class="auth">
+    <section class="auth-hero">
+      <div class="brand">${LOGO}<span>${esc(NAME)}</span></div>
+      ${compassSvg()}
+      <div class="hero-copy">
+        <h1>Estudiá la teoría a tu ritmo.</h1>
+        <p>Cursos, lecciones en video y seguimiento de tu avance para llegar preparado a rendir tu examen de piloto privado.</p>
+      </div>
+      <div class="hero-foot">Formación teórica de piloto privado</div>
+    </section>
+    <section class="auth-main"><div class="auth-card">${card}</div></section>
+  </div>`;
+}
+
+function demoBox() {
+  if (LIVE) return '';
+  return `<div class="demo-box">
+    <p><b>Modo demo.</b> Todavía no hay una base de datos conectada, así que podés recorrer la página con datos de ejemplo guardados solo en este navegador.</p>
+    <div class="btns">
+      <button type="button" class="btn btn-ghost btn-sm" data-act="demo-login" data-role="student">Entrar como alumno</button>
+      <button type="button" class="btn btn-ghost btn-sm" data-act="demo-login" data-role="admin">Entrar como administrador</button>
+    </div></div>`;
+}
+
+function authForm() {
+  const m = state.authMode;
+  if (m === 'register') return `
+    <h2>Crear cuenta</h2><p class="lead">Registrate para acceder a los cursos.</p>
+    <form data-form="register" autocomplete="on">
+      <label class="field"><span>Nombre y apellido</span><input class="input" name="name" required autocomplete="name"></label>
+      <label class="field"><span>Email</span><input class="input" type="email" name="email" required autocomplete="email"></label>
+      <div class="row">
+        <label class="field"><span>Contraseña</span><input class="input" type="password" name="password" required minlength="8" autocomplete="new-password"><small>Mínimo 8 caracteres.</small></label>
+        <label class="field"><span>Repetir contraseña</span><input class="input" type="password" name="password2" required minlength="8" autocomplete="new-password"></label>
+      </div>
+      <button class="btn btn-primary btn-block" type="submit">Crear cuenta</button>
+    </form>
+    <div class="auth-links"><span>¿Ya tenés cuenta? <button class="link-btn" data-act="auth-mode" data-mode="login">Iniciá sesión</button></span></div>
+    ${demoBox()}`;
+  if (m === 'forgot') return `
+    <h2>Recuperar contraseña</h2><p class="lead">Te enviamos un link para elegir una contraseña nueva.</p>
+    <form data-form="forgot">
+      <label class="field"><span>Email</span><input class="input" type="email" name="email" required autocomplete="email"></label>
+      <button class="btn btn-primary btn-block" type="submit">Enviar link</button>
+    </form>
+    <div class="auth-links"><button class="link-btn" data-act="auth-mode" data-mode="login">Volver a iniciar sesión</button></div>`;
+  if (m === 'check-email') return `
+    <h2>Revisá tu email</h2>
+    <p class="lead">Te mandamos un mensaje a <b>${esc(state.authEmail)}</b>. Abrí el link que trae para continuar.</p>
+    <div class="notice">Si no lo ves en unos minutos, mirá la carpeta de spam.</div>
+    <button class="btn btn-ghost btn-block" data-act="auth-mode" data-mode="login">Volver a iniciar sesión</button>`;
+  return `
+    <h2>Iniciar sesión</h2><p class="lead">Ingresá con tu email y contraseña.</p>
+    <form data-form="login" autocomplete="on">
+      <label class="field"><span>Email</span><input class="input" type="email" name="email" required autocomplete="email"></label>
+      <label class="field"><span>Contraseña</span><input class="input" type="password" name="password" required autocomplete="current-password"></label>
+      <button class="btn btn-primary btn-block" type="submit">Entrar</button>
+    </form>
+    <div class="auth-links">
+      <button class="link-btn" data-act="auth-mode" data-mode="forgot">Olvidé mi contraseña</button>
+      <span>¿Sos nuevo? <button class="link-btn" data-act="auth-mode" data-mode="register">Creá tu cuenta</button></span>
+    </div>
+    ${demoBox()}`;
+}
+
+function recoveryForm() {
+  return `
+    <h2>Elegí una contraseña nueva</h2><p class="lead">Usá al menos 8 caracteres.</p>
+    <form data-form="recovery">
+      <label class="field"><span>Contraseña nueva</span><input class="input" type="password" name="password" required minlength="8" autocomplete="new-password"></label>
+      <label class="field"><span>Repetir contraseña</span><input class="input" type="password" name="password2" required minlength="8" autocomplete="new-password"></label>
+      <button class="btn btn-primary btn-block" type="submit">Guardar contraseña</button>
+    </form>`;
+}
+
+/* ============================================================
+   7) VISTAS: ESTRUCTURA PRINCIPAL (menú)
+   ============================================================ */
+const NAV = [
+  { id: 'inicio',     label: 'Inicio',      icon: 'home' },
+  { id: 'cursos',     label: 'Mis cursos',  icon: 'book' },
+  { id: 'catalogo',   label: 'Catálogo',    icon: 'grid' },
+  { id: 'examenes',   label: 'Exámenes',    icon: 'check',  soon: true },
+  { id: 'biblioteca', label: 'Biblioteca',  icon: 'folder', soon: true },
+  { id: 'calendario', label: 'Calendario',  icon: 'cal',    soon: true },
+  { id: 'perfil',     label: 'Mi perfil',   icon: 'user' },
+];
+
+function shell(inner) {
+  const r = route();
+  const cur = r[0] === 'curso' ? 'cursos' : r[0];
+  const nav = NAV.map(n => `<a class="nav-item ${cur === n.id ? 'active' : ''}" href="#/${n.id}">${icon(n.icon)}<span>${n.label}</span>${n.soon ? '<em class="soon">Pronto</em>' : ''}</a>`).join('');
+  const adminNav = isAdmin() ? `<div class="nav-sep">Administración</div><a class="nav-item ${cur === 'admin' ? 'active' : ''}" href="#/admin">${icon('shield')}<span>Panel de administración</span></a>` : '';
+  const p = state.profile || {};
+  return `
+  ${LIVE ? '' : '<div class="demo-banner">Modo demo: los datos se guardan solo en este navegador. Conectá Supabase en config.js para usar cuentas reales.</div>'}
+  <div class="topbar"><button class="icon-btn" data-act="toggle-nav" aria-label="Abrir menú">${icon('menu')}</button><div class="brand">${esc(NAME)}</div></div>
+  <div class="scrim" data-act="toggle-nav"></div>
+  <div class="app">
+    <aside class="sidebar" aria-label="Menú principal">
+      <div class="brand">${LOGO}<span>${esc(NAME)}</span></div>
+      <nav class="nav">${nav}${adminNav}</nav>
+      <div class="me">
+        <div><b>${esc(p.full_name || 'Sin nombre')}</b><span>${esc(state.user.email)}</span></div>
+        <button class="btn" data-act="logout">${icon('logout')} Cerrar sesión</button>
+      </div>
+    </aside>
+    <main class="main" id="main">${inner}</main>
+  </div>`;
+}
+
+function pageContent() {
+  const r = route();
+  switch (r[0]) {
+    case 'cursos':   return viewMisCursos();
+    case 'catalogo': return viewCatalogo();
+    case 'curso':    return viewCurso(r[1], r[2] === 'leccion' ? r[3] : null);
+    case 'perfil':   return viewPerfil();
+    case 'admin':    return viewAdmin(r);
+    case 'examenes': case 'biblioteca': case 'calendario': return viewSoon(r[0]);
+    default:         return viewInicio();
+  }
+}
+
+/* ============================================================
+   8) VISTAS: ALUMNO
+   ============================================================ */
+function greeting() { const h = new Date().getHours(); return h < 6 ? 'Buenas noches' : h < 13 ? 'Buen día' : h < 20 ? 'Buenas tardes' : 'Buenas noches'; }
+
+function courseCard(c) {
+  const enrolled = state.enrolled.has(c.id), pr = progressOf(c.id), mins = minutesOf(c.id);
+  return `
+  <a class="course" href="#/curso/${esc(c.id)}">
+    <div class="meta"><span class="badge">${esc(c.level || 'Básico')}</span>${c.published ? '' : '<span class="badge draft">Borrador</span>'}${enrolled && pr.pct === 100 ? '<span class="badge ok">Completo</span>' : ''}</div>
+    <h3>${esc(c.title)}</h3>
+    <p>${esc(c.description || 'Sin descripción todavía.')}</p>
+    <div class="foot">
+      ${enrolled ? `<small><span>${pr.done} de ${pr.total} lecciones</span><span>${pr.pct}%</span></small><div class="bar ${pr.pct === 100 ? 'done' : ''}"><i style="width:${pr.pct}%"></i></div>`
+                 : `<small><span>${pr.total} ${plural(pr.total, 'lección', 'lecciones')}${mins ? ' · ' + mins + ' min' : ''}</span></small>`}
+    </div>
+  </a>`;
+}
+
+function viewInicio() {
+  const p = state.profile || {};
+  const mine = state.courses.filter(c => state.enrolled.has(c.id));
+  const totalL = mine.reduce((s, c) => s + progressOf(c.id).total, 0);
+  const doneL = mine.reduce((s, c) => s + progressOf(c.id).done, 0);
+  const pct = totalL ? Math.round(doneL / totalL * 100) : 0;
+  const finished = mine.filter(c => { const x = progressOf(c.id); return x.total && x.pct === 100; }).length;
+
+  // próxima lección pendiente
+  let next = null;
+  for (const c of mine) {
+    const nl = lessonsOf(c.id).find(l => !state.done.has(l.id));
+    if (nl) { next = { c, l: nl, pr: progressOf(c.id) }; break; }
+  }
+
+  return `
+  <div class="page-head"><div><h1>${greeting()}, ${esc(firstName(p.full_name))}</h1><p>${esc(p.etapa || 'Aspirante')}${p.aeroclub ? ' · ' + esc(p.aeroclub) : ''}</p></div></div>
+  <div class="stats">
+    <div class="stat"><b>${mine.length}</b><span>${plural(mine.length, 'curso en marcha', 'cursos en marcha')}</span></div>
+    <div class="stat"><b>${doneL}</b><span>${plural(doneL, 'lección completada', 'lecciones completadas')}</span></div>
+    <div class="stat"><b>${pct}%</b><span>de avance general</span></div>
+    <div class="stat"><b>${finished}</b><span>${plural(finished, 'curso terminado', 'cursos terminados')}</span></div>
+  </div>
+  ${next ? `
+  <div class="resume">
+    <div><small>Seguí donde lo dejaste</small><h2>${esc(next.l.title)}</h2><p>${esc(next.c.title)} · ${next.pr.done} de ${next.pr.total} lecciones</p></div>
+    <a class="btn btn-primary" href="#/curso/${esc(next.c.id)}/leccion/${esc(next.l.id)}">Continuar lección</a>
+  </div>` : ''}
+  <div class="section">
+    <h2>Mis cursos</h2>
+    ${mine.length ? `<div class="grid">${mine.map(courseCard).join('')}</div>` : `
+    <div class="empty"><h3>Todavía no estás inscripto en ningún curso</h3><p>Elegí un curso del catálogo y empezá con la primera lección.</p><a class="btn btn-primary" href="#/catalogo">Ver el catálogo</a></div>`}
+  </div>
+  <div class="section">
+    <h2>Lo que viene</h2>
+    <div class="soon-list">
+      <div class="card"><h3>Exámenes</h3><p>Simulacros de opción múltiple con corrección automática.</p></div>
+      <div class="card"><h3>Biblioteca</h3><p>Manuales, cartas y material descargable.</p></div>
+      <div class="card"><h3>Calendario</h3><p>Clases en vivo y fechas de examen.</p></div>
+    </div>
+  </div>`;
+}
+
+function viewMisCursos() {
+  const mine = state.courses.filter(c => state.enrolled.has(c.id));
+  return `
+  <div class="page-head"><div><h1>Mis cursos</h1><p>Los cursos en los que estás inscripto.</p></div><a class="btn btn-ghost" href="#/catalogo">Ver el catálogo</a></div>
+  ${mine.length ? `<div class="grid">${mine.map(courseCard).join('')}</div>` : `
+  <div class="empty"><h3>No tenés cursos todavía</h3><p>Inscribite desde el catálogo para ver acá tu avance.</p><a class="btn btn-primary" href="#/catalogo">Ir al catálogo</a></div>`}`;
+}
+
+function viewCatalogo() {
+  return `
+  <div class="page-head"><div><h1>Catálogo</h1><p>Todos los cursos disponibles.</p></div></div>
+  <div class="toolbar"><input class="input" type="search" id="filter" placeholder="Buscar un curso" aria-label="Buscar un curso"></div>
+  ${state.courses.length ? `<div class="grid" id="catalog">${state.courses.map(c => `<div data-q="${esc((c.title + ' ' + (c.description || '') + ' ' + (c.level || '')).toLowerCase())}">${courseCard(c)}</div>`).join('')}</div>
+  <div class="empty" id="no-results" hidden><h3>No encontramos cursos con esa búsqueda</h3><p>Probá con otra palabra.</p></div>`
+  : `<div class="empty"><h3>Todavía no hay cursos publicados</h3><p>${isAdmin() ? 'Creá el primero desde el panel de administración.' : 'Pronto vas a encontrar acá los cursos disponibles.'}</p>${isAdmin() ? '<a class="btn btn-primary" href="#/admin/cursos">Ir al panel</a>' : ''}</div>`}`;
+}
+
+function viewSoon(id) {
+  const t = { examenes: ['Exámenes', 'Acá vas a poder rendir simulacros de opción múltiple con corrección automática y ver tu historial de resultados.'],
+              biblioteca: ['Biblioteca', 'Acá vas a encontrar manuales, cartas y material descargable ordenado por tema.'],
+              calendario: ['Calendario', 'Acá vas a ver las clases en vivo y las fechas importantes de tu formación.'] }[id];
+  return `<div class="page-head"><div><h1>${t[0]}</h1></div></div>
+  <div class="empty"><h3>Esta sección está en construcción</h3><p>${t[1]}</p><a class="btn btn-ghost" href="#/inicio">Volver al inicio</a></div>`;
+}
+
+function viewCurso(cid, lid) {
+  const c = courseById(cid);
+  if (!c) return `<div class="empty"><h3>No encontramos ese curso</h3><p>Puede que haya sido eliminado o todavía no esté publicado.</p><a class="btn btn-primary" href="#/catalogo">Volver al catálogo</a></div>`;
+  const ls = lessonsOf(cid), pr = progressOf(cid), enrolled = state.enrolled.has(cid);
+  const canOpen = enrolled || isAdmin();
+
+  if (lid) {
+    const l = ls.find(x => x.id === lid);
+    if (!l) return `<div class="empty"><h3>No encontramos esa lección</h3><a class="btn btn-primary" href="#/curso/${esc(cid)}">Volver al curso</a></div>`;
+    if (!canOpen) return `<div class="crumbs"><a href="#/curso/${esc(cid)}">Volver a ${esc(c.title)}</a></div>
+      <div class="empty"><h3>Inscribite para ver esta lección</h3><p>Necesitás estar inscripto en el curso para acceder a sus lecciones.</p><button class="btn btn-primary" data-act="enroll" data-id="${esc(cid)}">Inscribirme en el curso</button></div>`;
+    return viewLeccion(c, l, ls, enrolled);
+  }
+
+  const next = ls.find(l => !state.done.has(l.id)) || ls[0];
+  const list = ls.length ? `<ul class="lesson-list">${ls.map((l, i) => `
+    <li><a class="${state.done.has(l.id) ? 'done' : ''}" href="#/curso/${esc(cid)}/leccion/${esc(l.id)}">
+      <span class="n">${state.done.has(l.id) ? '✓' : i + 1}</span>
+      <span class="t">${esc(l.title)}<small>${l.duration_min ? l.duration_min + ' min' : 'Lección'}${l.video_url ? ' · con video' : ''}</small></span></a></li>`).join('')}</ul>`
+    : `<div class="empty"><h3>Este curso todavía no tiene lecciones</h3><p>${isAdmin() ? 'Agregalas desde el panel de administración.' : 'Pronto van a estar disponibles.'}</p>${isAdmin() ? `<a class="btn btn-primary" href="#/admin/curso/${esc(cid)}">Agregar lecciones</a>` : ''}</div>`;
+
+  return `
+  <div class="crumbs"><a href="#/catalogo">Volver al catálogo</a></div>
+  <div class="course-head">
+    <div>
+      <div class="meta" style="display:flex;gap:.5rem;margin-bottom:.75rem"><span class="badge">${esc(c.level || 'Básico')}</span>${c.published ? '' : '<span class="badge draft">Borrador</span>'}</div>
+      <h1>${esc(c.title)}</h1>
+      <p class="muted" style="margin-top:.75rem;max-width:60ch">${esc(c.description || '')}</p>
+      <div class="section"><h2>Lecciones</h2>${list}</div>
+    </div>
+    <aside class="card">
+      <h3>${enrolled ? 'Tu avance' : 'Sobre este curso'}</h3>
+      <p class="muted small">${pr.total} ${plural(pr.total, 'lección', 'lecciones')}${minutesOf(cid) ? ' · ' + minutesOf(cid) + ' min en total' : ''}</p>
+      ${enrolled ? `<div class="bar ${pr.pct === 100 ? 'done' : ''}" style="margin:.5rem 0"><i style="width:${pr.pct}%"></i></div><p class="small muted">${pr.done} de ${pr.total} completadas (${pr.pct}%)</p>
+        ${next ? `<a class="btn btn-primary btn-block" href="#/curso/${esc(cid)}/leccion/${esc(next.id)}">${pr.done ? 'Continuar' : 'Empezar el curso'}</a>` : ''}
+        <button class="btn btn-ghost btn-block btn-sm" style="margin-top:.6rem" data-act="unenroll" data-id="${esc(cid)}">Darme de baja</button>`
+      : `<button class="btn btn-primary btn-block" data-act="enroll" data-id="${esc(cid)}">Inscribirme</button>
+        ${isAdmin() ? `<a class="btn btn-ghost btn-block btn-sm" style="margin-top:.6rem" href="#/admin/curso/${esc(cid)}">Editar este curso</a>` : ''}`}
+    </aside>
+  </div>`;
+}
+
+function viewLeccion(c, l, ls, enrolled) {
+  const i = ls.findIndex(x => x.id === l.id), prev = ls[i - 1], next = ls[i + 1], done = state.done.has(l.id);
+  return `
+  <div class="crumbs"><a href="#/curso/${esc(c.id)}">Volver a ${esc(c.title)}</a></div>
+  <div class="lesson-layout">
+    <article>
+      ${videoHtml(l.video_url)}
+      <div class="lesson-head">
+        <div><div class="k">Lección ${i + 1} de ${ls.length}</div><h1>${esc(l.title)}</h1></div>
+        ${enrolled ? `<button class="btn ${done ? 'btn-ghost' : 'btn-primary'}" data-act="toggle-done" data-id="${esc(l.id)}">${done ? 'Completada · deshacer' : 'Marcar como completada'}</button>` : ''}
+      </div>
+      <div class="prose">${richText(l.content) || '<p class="muted">Esta lección todavía no tiene texto.</p>'}</div>
+      <div class="pager">
+        ${prev ? `<a class="btn btn-ghost" href="#/curso/${esc(c.id)}/leccion/${esc(prev.id)}">Lección anterior</a>` : '<span></span>'}
+        ${next ? `<a class="btn btn-primary" href="#/curso/${esc(c.id)}/leccion/${esc(next.id)}">Siguiente lección</a>` : `<a class="btn btn-ghost" href="#/curso/${esc(c.id)}">Volver al curso</a>`}
+      </div>
+    </article>
+    <aside class="card side-list">
+      <h3>Contenido del curso</h3>
+      <ul class="lesson-list">${ls.map((x, n) => `<li><a class="${state.done.has(x.id) ? 'done' : ''} ${x.id === l.id ? 'current' : ''}" href="#/curso/${esc(c.id)}/leccion/${esc(x.id)}"><span class="n">${state.done.has(x.id) ? '✓' : n + 1}</span><span class="t">${esc(x.title)}</span></a></li>`).join('')}</ul>
+    </aside>
+  </div>`;
+}
+
+function viewPerfil() {
+  const p = state.profile || {};
+  return `
+  <div class="page-head"><div><h1>Mi perfil</h1><p>Tus datos y tu contraseña.</p></div></div>
+  <div class="grid" style="grid-template-columns:repeat(auto-fit,minmax(320px,1fr));align-items:start">
+    <form class="card" data-form="profile">
+      <h3 style="margin-bottom:1rem">Datos personales</h3>
+      <label class="field"><span>Nombre y apellido</span><input class="input" name="full_name" value="${esc(p.full_name)}" required></label>
+      <label class="field"><span>Email</span><input class="input" value="${esc(state.user.email)}" disabled></label>
+      <label class="field"><span>Aeroclub o escuela</span><input class="input" name="aeroclub" value="${esc(p.aeroclub)}" placeholder="Opcional"></label>
+      <label class="field"><span>¿En qué etapa estás?</span><select class="input" name="etapa">${STAGES.map(s => `<option ${p.etapa === s ? 'selected' : ''}>${s}</option>`).join('')}</select></label>
+      <button class="btn btn-primary" type="submit">Guardar cambios</button>
+    </form>
+    <form class="card" data-form="password">
+      <h3 style="margin-bottom:1rem">Cambiar contraseña</h3>
+      <label class="field"><span>Contraseña nueva</span><input class="input" type="password" name="password" required minlength="8" autocomplete="new-password"></label>
+      <label class="field"><span>Repetir contraseña</span><input class="input" type="password" name="password2" required minlength="8" autocomplete="new-password"></label>
+      <button class="btn btn-primary" type="submit">Actualizar contraseña</button>
+    </form>
+  </div>`;
+}
+
+/* ============================================================
+   9) VISTAS: ADMINISTRACIÓN
+   ============================================================ */
+function viewAdmin(r) {
+  if (!isAdmin()) return `<div class="empty"><h3>No tenés acceso a esta sección</h3><p>Solo los administradores pueden entrar al panel.</p><a class="btn btn-primary" href="#/inicio">Volver al inicio</a></div>`;
+  const sub = r[1] || 'resumen';
+  if (sub === 'curso') return adminCursoEditor(r[2]);
+  const tabs = [['resumen', 'Resumen'], ['cursos', 'Cursos'], ['alumnos', 'Alumnos']]
+    .map(([id, l]) => `<a class="${sub === id ? 'active' : ''}" href="#/admin${id === 'resumen' ? '' : '/' + id}">${l}</a>`).join('');
+  let body = '';
+  if (sub === 'cursos') body = adminCursos();
+  else if (sub === 'alumnos') body = adminAlumnos();
+  else body = adminResumen();
+  return `<div class="page-head"><div><h1>Panel de administración</h1><p>Cursos, lecciones y alumnos.</p></div></div><nav class="tabs" aria-label="Secciones del panel">${tabs}</nav>${body}`;
+}
+
+function adminResumen() {
+  const A = state.admin, students = A.profiles.filter(p => p.role !== 'admin');
+  const pub = state.courses.filter(c => c.published).length;
+  const recent = A.profiles.slice(0, 5);
+  return `
+  <div class="stats">
+    <div class="stat"><b>${students.length}</b><span>${plural(students.length, 'alumno registrado', 'alumnos registrados')}</span></div>
+    <div class="stat"><b>${pub}<small style="font-size:1.2rem;color:var(--ink3)"> / ${state.courses.length}</small></b><span>cursos publicados</span></div>
+    <div class="stat"><b>${state.lessons.length}</b><span>${plural(state.lessons.length, 'lección cargada', 'lecciones cargadas')}</span></div>
+    <div class="stat"><b>${A.enrollments.length}</b><span>${plural(A.enrollments.length, 'inscripción', 'inscripciones')}</span></div>
+  </div>
+  <h2 style="margin-bottom:1rem">Últimas altas</h2>
+  ${recent.length ? `<div class="table-wrap"><table><thead><tr><th>Nombre</th><th>Email</th><th>Alta</th></tr></thead><tbody>${recent.map(p => `<tr><td>${esc(p.full_name || '—')}</td><td>${esc(p.email)}</td><td>${fmtDate(p.created_at)}</td></tr>`).join('')}</tbody></table></div>` : '<p class="muted">Todavía no hay usuarios.</p>'}`;
+}
+
+function adminCursos() {
+  return `
+  <div class="toolbar" style="justify-content:space-between"><span class="muted">Los cursos en borrador solo los ven los administradores.</span><button class="btn btn-primary" data-act="new-course">${icon('plus')} Nuevo curso</button></div>
+  ${state.courses.length ? `<div class="table-wrap"><table><thead><tr><th>Curso</th><th>Nivel</th><th>Lecciones</th><th>Estado</th><th></th></tr></thead><tbody>
+  ${state.courses.map(c => `<tr>
+    <td><b>${esc(c.title)}</b></td><td>${esc(c.level || '')}</td><td>${lessonsOf(c.id).length}</td>
+    <td>${c.published ? '<span class="badge ok">Publicado</span>' : '<span class="badge draft">Borrador</span>'}</td>
+    <td><div class="acts"><a class="btn btn-ghost btn-sm" href="#/admin/curso/${esc(c.id)}">Lecciones</a>
+      <button class="icon-btn" data-act="edit-course" data-id="${esc(c.id)}" aria-label="Editar curso">${icon('edit')}</button>
+      <button class="icon-btn danger" data-act="del-course" data-id="${esc(c.id)}" aria-label="Eliminar curso">${icon('trash')}</button></div></td></tr>`).join('')}
+  </tbody></table></div>` : `<div class="empty"><h3>Todavía no creaste ningún curso</h3><p>Creá el primero y después agregale las lecciones.</p><button class="btn btn-primary" data-act="new-course">Crear un curso</button></div>`}`;
+}
+
+function adminCursoEditor(cid) {
+  const c = courseById(cid);
+  if (!c) return `<div class="empty"><h3>No encontramos ese curso</h3><a class="btn btn-primary" href="#/admin/cursos">Volver a los cursos</a></div>`;
+  const ls = lessonsOf(cid);
+  return `
+  <div class="crumbs"><a href="#/admin/cursos">Volver a los cursos</a></div>
+  <div class="page-head"><div><h1>${esc(c.title)}</h1><p>${c.published ? '<span class="badge ok">Publicado</span>' : '<span class="badge draft">Borrador</span>'} &nbsp;${ls.length} ${plural(ls.length, 'lección', 'lecciones')}</p></div>
+    <div style="display:flex;gap:.6rem;flex-wrap:wrap"><a class="btn btn-ghost" href="#/curso/${esc(cid)}">Ver como alumno</a><button class="btn btn-ghost" data-act="edit-course" data-id="${esc(cid)}">Editar curso</button><button class="btn btn-primary" data-act="new-lesson" data-id="${esc(cid)}">${icon('plus')} Nueva lección</button></div></div>
+  ${ls.length ? `<div class="table-wrap"><table><thead><tr><th style="width:56px">N.º</th><th>Lección</th><th>Video</th><th>Min</th><th></th></tr></thead><tbody>
+  ${ls.map((l, i) => `<tr><td>${i + 1}</td><td><b>${esc(l.title)}</b></td><td>${l.video_url ? '<span class="badge ok">Cargado</span>' : '<span class="badge draft">Falta</span>'}</td><td>${l.duration_min || '—'}</td>
+    <td><div class="acts">
+      <button class="icon-btn" data-act="move-lesson" data-id="${esc(l.id)}" data-dir="-1" ${i === 0 ? 'disabled' : ''} aria-label="Subir">${icon('up')}</button>
+      <button class="icon-btn" data-act="move-lesson" data-id="${esc(l.id)}" data-dir="1" ${i === ls.length - 1 ? 'disabled' : ''} aria-label="Bajar">${icon('down')}</button>
+      <button class="icon-btn" data-act="edit-lesson" data-id="${esc(l.id)}" aria-label="Editar lección">${icon('edit')}</button>
+      <button class="icon-btn danger" data-act="del-lesson" data-id="${esc(l.id)}" aria-label="Eliminar lección">${icon('trash')}</button></div></td></tr>`).join('')}
+  </tbody></table></div>` : `<div class="empty"><h3>Este curso no tiene lecciones</h3><p>Cada lección puede tener un video (YouTube, Vimeo o Bunny) y un texto.</p><button class="btn btn-primary" data-act="new-lesson" data-id="${esc(cid)}">Agregar la primera lección</button></div>`}`;
+}
+
+function adminAlumnos() {
+  const A = state.admin;
+  const nEn = id => A.enrollments.filter(e => e.user_id === id).length;
+  const nDone = id => A.progress.filter(p => p.user_id === id).length;
+  return `
+  <p class="muted">Los administradores pueden ver todo el contenido, incluidos los borradores. Para dar permisos a alguien, cambiale el rol.</p>
+  <div class="table-wrap"><table><thead><tr><th>Nombre</th><th>Email</th><th>Etapa</th><th>Cursos</th><th>Lecciones</th><th>Alta</th><th>Rol</th></tr></thead><tbody>
+  ${A.profiles.map(p => `<tr><td><b>${esc(p.full_name || '—')}</b></td><td>${esc(p.email)}</td><td>${esc(p.etapa || '')}</td><td>${nEn(p.id)}</td><td>${nDone(p.id)}</td><td>${fmtDate(p.created_at)}</td>
+    <td><select class="input" style="min-height:36px;padding:.2rem .5rem;width:auto" data-role-user="${esc(p.id)}" aria-label="Rol de ${esc(p.full_name || p.email)}" ${p.id === state.user.id ? 'disabled title="No podés cambiar tu propio rol"' : ''}>
+      <option value="student" ${p.role === 'student' ? 'selected' : ''}>Alumno</option><option value="admin" ${p.role === 'admin' ? 'selected' : ''}>Administrador</option></select></td></tr>`).join('')}
+  </tbody></table></div>`;
+}
+
+/* ---- Ventana modal ---- */
+const modal = () => $('#modal');
+function openModal(html) { const m = modal(); m.innerHTML = `<div class="modal-box">${html}</div>`; if (!m.open) m.showModal(); const f = m.querySelector('input:not([type=hidden]),textarea'); if (f) f.focus(); }
+function closeModal() { const m = modal(); if (m.open) m.close(); }
+
+function courseForm(c) {
+  c = c || {};
+  return `<h3>${c.id ? 'Editar curso' : 'Nuevo curso'}</h3>
+  <form data-form="course">
+    <input type="hidden" name="id" value="${esc(c.id || '')}">
+    <label class="field"><span>Título</span><input class="input" name="title" value="${esc(c.title || '')}" required maxlength="120"></label>
+    <label class="field"><span>Descripción</span><textarea class="input" name="description" style="min-height:100px" maxlength="600">${esc(c.description || '')}</textarea></label>
+    <label class="field"><span>Nivel</span><select class="input" name="level">${LEVELS.map(l => `<option ${c.level === l ? 'selected' : ''}>${l}</option>`).join('')}</select></label>
+    <label class="check"><input type="checkbox" name="published" ${c.published ? 'checked' : ''}> Publicado (visible para los alumnos)</label>
+    <div class="modal-actions"><button type="button" class="btn btn-ghost" data-act="close-modal">Cancelar</button><button class="btn btn-primary" type="submit">Guardar curso</button></div>
+  </form>`;
+}
+function lessonForm(courseId, l) {
+  l = l || {};
+  return `<h3>${l.id ? 'Editar lección' : 'Nueva lección'}</h3>
+  <form data-form="lesson">
+    <input type="hidden" name="id" value="${esc(l.id || '')}"><input type="hidden" name="course_id" value="${esc(courseId)}">
+    <label class="field"><span>Título</span><input class="input" name="title" value="${esc(l.title || '')}" required maxlength="140"></label>
+    <div class="row">
+      <label class="field"><span>Link del video</span><input class="input" type="url" name="video_url" value="${esc(l.video_url || '')}" placeholder="https://youtu.be/…"><small>YouTube (no listado), Vimeo o Bunny.</small></label>
+      <label class="field"><span>Duración (minutos)</span><input class="input" type="number" name="duration_min" min="0" max="600" value="${esc(l.duration_min ?? '')}"></label>
+    </div>
+    <label class="field"><span>Texto de la lección</span><textarea class="input" name="content">${esc(l.content || '')}</textarea><small>Dejá una línea en blanco para separar párrafos.</small></label>
+    <div class="modal-actions"><button type="button" class="btn btn-ghost" data-act="close-modal">Cancelar</button><button class="btn btn-primary" type="submit">Guardar lección</button></div>
+  </form>`;
+}
+
+/* ============================================================
+   10) RENDER
+   ============================================================ */
+function render() {
+  const app = $('#app');
+  if (state.fatal) {
+    app.innerHTML = `<div class="center"><div class="fatal"><h2>Algo no está andando</h2><p class="muted">No pudimos cargar la página.</p><code>${esc(state.fatal)}</code><button class="btn btn-primary" onclick="location.reload()">Reintentar</button></div></div>`;
+    return;
+  }
+  if (!state.ready) { app.innerHTML = `<div class="center"><div><div class="spinner"></div><p class="muted">Cargando…</p></div></div>`; return; }
+  if (state.recovery) { app.innerHTML = authShell(recoveryForm()); return; }
+  if (!state.user) { app.innerHTML = authShell(authForm()); return; }
+  app.innerHTML = shell(pageContent());
+  const r = route();
+  document.title = (r[0] === 'inicio' ? '' : (NAV.find(n => n.id === r[0]) || { label: r[0] === 'admin' ? 'Administración' : 'Curso' }).label + ' · ') + NAME;
+}
+
+async function onRoute() {
+  if (state.user && state.profile && route()[0] === 'admin' && isAdmin() && !state.adminLoaded) {
+    try { await loadAdmin(); } catch (e) { toast(humanError(e), 'err'); }
+  }
+  render();
+  window.scrollTo(0, 0);
+}
+
+/* ============================================================
+   11) AUTENTICACIÓN (eventos)
+   ============================================================ */
+async function handleAuth(ev, user) {
+  try {
+    if (ev === 'PASSWORD_RECOVERY') {
+      state.recovery = true; state.user = user; state.ready = true; render();
+      return;
+    }
+    if (!user) {
+      Object.assign(state, { user: null, profile: null, courses: [], lessons: [], enrolled: new Set(), done: new Set(), adminLoaded: false, recovery: false, authMode: 'login' });
+      state.ready = true;
+      if (ev === 'SIGNED_OUT') history.replaceState(null, '', location.pathname + location.search);
+      render();
+      return;
+    }
+    if (state.user && state.user.id === user.id && state.profile) return;   // ya está cargado
+    state.user = user;
+    await loadAll();
+    state.ready = true;
+    render();
+  } catch (e) {
+    console.error(e);
+    state.ready = true;
+    state.fatal = (e && e.message ? e.message : String(e)) + (LIVE ? '  ·  ¿Ejecutaste el archivo supabase-setup.sql en Supabase?' : '');
+    render();
+  }
+}
+
+/* ============================================================
+   12) ACCIONES (clicks)
+   ============================================================ */
+const ACT = {
+  'auth-mode'(el) { state.authMode = el.dataset.mode; render(); },
+  async 'demo-login'(el) { await API.demoLogin(el.dataset.role); },
+  async logout() { await API.signOut(); },
+  'toggle-nav'() { const s = $('.sidebar'), c = $('.scrim'); if (s) s.classList.toggle('open'); if (c) c.classList.toggle('show'); },
+  'close-modal'() { closeModal(); },
+
+  async enroll(el) {
+    await API.enroll(state.user.id, el.dataset.id); state.enrolled.add(el.dataset.id);
+    if (state.adminLoaded) state.adminLoaded = false;
+    render(); toast('Te inscribiste al curso.', 'ok');
+  },
+  async unenroll(el) {
+    if (!confirm('¿Querés darte de baja de este curso? Tu progreso se conserva.')) return;
+    await API.unenroll(state.user.id, el.dataset.id); state.enrolled.delete(el.dataset.id);
+    state.adminLoaded = false; render(); toast('Te diste de baja del curso.');
+  },
+  async 'toggle-done'(el) {
+    const id = el.dataset.id, done = !state.done.has(id);
+    await API.setProgress(state.user.id, id, done);
+    done ? state.done.add(id) : state.done.delete(id);
+    state.adminLoaded = false; render();
+    if (done) toast('Lección completada.', 'ok');
+  },
+
+  // --- administración ---
+  'new-course'() { openModal(courseForm()); },
+  'edit-course'(el) { openModal(courseForm(courseById(el.dataset.id))); },
+  async 'del-course'(el) {
+    const c = courseById(el.dataset.id);
+    if (!confirm(`¿Eliminar el curso "${c.title}" con todas sus lecciones? No se puede deshacer.`)) return;
+    await API.deleteCourse(c.id); await loadCatalog(); await loadMine(); state.adminLoaded = false;
+    await onRoute(); toast('Curso eliminado.');
+  },
+  'new-lesson'(el) { openModal(lessonForm(el.dataset.id)); },
+  'edit-lesson'(el) { const l = state.lessons.find(x => x.id === el.dataset.id); openModal(lessonForm(l.course_id, l)); },
+  async 'del-lesson'(el) {
+    const l = state.lessons.find(x => x.id === el.dataset.id);
+    if (!confirm(`¿Eliminar la lección "${l.title}"?`)) return;
+    await API.deleteLesson(l.id); await loadCatalog(); await loadMine(); state.adminLoaded = false;
+    await onRoute(); toast('Lección eliminada.');
+  },
+  async 'move-lesson'(el) {
+    const l = state.lessons.find(x => x.id === el.dataset.id), dir = Number(el.dataset.dir);
+    const ls = lessonsOf(l.course_id), i = ls.findIndex(x => x.id === l.id), o = ls[i + dir];
+    if (!o) return;
+    // reasignamos posiciones 1..n con el cambio aplicado, así no hay empates
+    const order = ls.map(x => x.id); order[i] = o.id; order[i + dir] = l.id;
+    await Promise.all(order.map((id, n) => { const x = ls.find(y => y.id === id); return x.position === n + 1 ? null : API.saveLesson({ id, position: n + 1 }); }));
+    await loadCatalog(); render();
+  },
+};
+
+document.addEventListener('click', async e => {
+  const el = e.target.closest('[data-act]');
+  if (!el || !ACT[el.dataset.act]) return;
+  if (el.tagName === 'A' && !el.getAttribute('href')) e.preventDefault();
+  try { await ACT[el.dataset.act](el, e); }
+  catch (err) { console.error(err); toast(humanError(err), 'err'); }
+});
+
+// cambio de rol y búsqueda en el catálogo
+document.addEventListener('change', async e => {
+  const sel = e.target.closest('select[data-role-user]');
+  if (!sel) return;
+  const p = state.admin.profiles.find(x => x.id === sel.dataset.roleUser);
+  const role = sel.value;
+  if (!confirm(`¿Cambiar el rol de ${p.full_name || p.email} a ${role === 'admin' ? 'administrador' : 'alumno'}?`)) { sel.value = p.role; return; }
+  try { await API.setRole(p.id, role); await loadAdmin(); render(); toast('Rol actualizado.', 'ok'); }
+  catch (err) { toast(humanError(err), 'err'); sel.value = p.role; }
+});
+document.addEventListener('input', e => {
+  if (e.target.id !== 'filter') return;
+  const q = e.target.value.trim().toLowerCase();
+  let shown = 0;
+  document.querySelectorAll('#catalog>[data-q]').forEach(n => { const ok = !q || n.dataset.q.includes(q); n.hidden = !ok; if (ok) shown++; });
+  const none = $('#no-results'); if (none) none.hidden = shown > 0;
+});
+
+/* ============================================================
+   13) FORMULARIOS
+   ============================================================ */
+const checkPw = d => {
+  if (d.password.length < 8) throw new Error('La contraseña tiene que tener al menos 8 caracteres.');
+  if (d.password !== d.password2) throw new Error('Las contraseñas no coinciden.');
+};
+
+const FORMS = {
+  async login(d) { await API.signIn(d.email.trim(), d.password); },
+  async register(d) {
+    checkPw(d);
+    const r = await API.signUp(d.email.trim(), d.password, d.name.trim());
+    if (r.needsConfirm) { state.authMode = 'check-email'; state.authEmail = d.email.trim(); render(); }
+  },
+  async forgot(d) {
+    await API.resetPassword(d.email.trim());
+    state.authMode = 'check-email'; state.authEmail = d.email.trim(); render();
+  },
+  async recovery(d) {
+    checkPw(d);
+    await API.updatePassword(d.password);
+    if (!state.profile) await loadAll();
+    state.recovery = false; history.replaceState(null, '', location.pathname + location.search);
+    render(); toast('Contraseña actualizada.', 'ok');
+  },
+  async profile(d) {
+    const saved = await API.saveProfile(state.user.id, { full_name: d.full_name.trim(), aeroclub: d.aeroclub.trim(), etapa: d.etapa });
+    state.profile = { ...state.profile, ...saved }; render(); toast('Datos guardados.', 'ok');
+  },
+  async password(d, form) { checkPw(d); await API.updatePassword(d.password); form.reset(); toast('Contraseña actualizada.', 'ok'); },
+  async course(d) {
+    const c = { title: d.title.trim(), description: d.description.trim(), level: d.level, published: d.published === 'on' };
+    if (d.id) c.id = d.id;
+    await API.saveCourse(c); await loadCatalog(); state.adminLoaded = false;
+    closeModal(); await onRoute(); toast('Curso guardado.', 'ok');
+  },
+  async lesson(d) {
+    const l = { course_id: d.course_id, title: d.title.trim(), video_url: d.video_url.trim(), duration_min: d.duration_min === '' ? null : Number(d.duration_min), content: d.content };
+    if (d.id) l.id = d.id;
+    else l.position = lessonsOf(d.course_id).reduce((m, x) => Math.max(m, x.position || 0), 0) + 1;
+    await API.saveLesson(l); await loadCatalog();
+    closeModal(); render(); toast('Lección guardada.', 'ok');
+  },
+};
+
+document.addEventListener('submit', async e => {
+  const f = e.target.closest('form[data-form]');
+  if (!f || !FORMS[f.dataset.form]) return;
+  e.preventDefault();
+  const btn = f.querySelector('button[type=submit]');
+  if (btn) { btn.disabled = true; btn.dataset.t = btn.textContent; btn.textContent = 'Un momento…'; }
+  try { await FORMS[f.dataset.form](Object.fromEntries(new FormData(f)), f); }
+  catch (err) { console.error(err); toast(humanError(err), 'err'); }
+  finally { if (btn && btn.isConnected) { btn.disabled = false; btn.textContent = btn.dataset.t; } }
+});
+
+modal().addEventListener('click', e => { if (e.target === modal()) closeModal(); });
+
+/* ============================================================
+   14) ARRANQUE
+   ============================================================ */
+function boot() {
+  if (WANTS_LIVE && !LIVE) {
+    state.fatal = 'No se pudo cargar la librería de Supabase (revisá tu conexión o bloqueadores de contenido).';
+    render(); return;
+  }
+  try { API = LIVE ? makeSB() : makeDM(); }
+  catch (e) { state.fatal = e.message; render(); return; }
+  window.addEventListener('hashchange', onRoute);
+  // diferimos con setTimeout: Supabase no admite llamadas async dentro del callback del evento
+  API.onAuth((ev, user) => setTimeout(() => handleAuth(ev, user), 0));
+  render();
+  API.start();
+  // por si nunca llega el primer evento de sesión
+  setTimeout(() => { if (!state.ready) { state.ready = true; render(); } }, 8000);
+}
+boot();
+})();
+</script>
 </body>
 </html>
