@@ -1,0 +1,967 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Campus Piloto Privado · teoría de vuelo online</title>
+<meta name="description" content="Estudiá la teoría de piloto privado con lecciones en video, herramientas de navegación y seguimiento de tu avance.">
+<meta name="theme-color" content="#0b1f33">
+<meta property="og:title" content="Campus Piloto Privado">
+<meta property="og:description" content="Estudiá la teoría de piloto privado como si ya estuvieras en cabina.">
+<meta property="og:type" content="website">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+/* ============================================================
+   BIENVENIDA · Campus Piloto Privado
+   Idea: la página es una cabina. Papel de carta aeronáutica,
+   tinta azul marino y un único acento magenta (el color de los
+   aeródromos en las cartas). La pieza memorable es el horizonte
+   artificial del inicio, que te sigue con el mouse.
+   ============================================================ */
+:root{
+  --paper:#edf1f4; --paper2:#e2e9ef; --surface:#fff;
+  --ink:#0b1f33; --ink2:#475f77; --ink3:#7a8ea3; --line:#cfd9e3;
+  --navy:#0b1f33; --navy2:#12304f; --navy3:#1e4670;
+  --blue:#1b5fa7; --sky:#4a9be0; --magenta:#b3236b; --magenta-d:#8f1b55;
+  --amber:#f0b429; --green:#2a9d6a; --red:#d6454d;
+  --display:'Barlow Condensed','Arial Narrow',system-ui,sans-serif;
+  --body:'IBM Plex Sans',system-ui,-apple-system,'Segoe UI',sans-serif;
+  --mono:'IBM Plex Mono',ui-monospace,Menlo,Consolas,monospace;
+  --r:14px; --r-sm:9px;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth;-webkit-text-size-adjust:100%}
+body{margin:0;font-family:var(--body);font-size:17px;line-height:1.6;color:var(--ink);background:var(--paper);-webkit-font-smoothing:antialiased;overflow-x:hidden}
+h1,h2,h3,h4{font-family:var(--display);font-weight:600;line-height:1.02;margin:0;letter-spacing:.005em}
+h2{font-size:clamp(2.1rem,4.4vw,3.3rem)}
+h3{font-size:1.5rem;line-height:1.1}
+p{margin:0 0 1em}
+a{color:inherit}
+button,input,select,textarea{font:inherit;color:inherit}
+:focus-visible{outline:3px solid var(--sky);outline-offset:3px;border-radius:6px}
+.wrap{max-width:1160px;margin:0 auto;padding:0 24px}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}
+.skip{position:absolute;left:-999px;top:8px;background:var(--navy);color:#fff;padding:.5rem 1rem;border-radius:8px;z-index:100}
+.skip:focus{left:8px}
+section{padding:104px 0;position:relative}
+.lead{font-size:1.15rem;color:var(--ink2);max-width:46ch}
+
+/* ---------- Botones ---------- */
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:.5rem;min-height:50px;padding:.7rem 1.5rem;border-radius:999px;border:1.5px solid transparent;font-weight:500;font-size:1rem;text-decoration:none;cursor:pointer;transition:background .18s,color .18s,border-color .18s,transform .18s;white-space:nowrap}
+.btn-primary{background:var(--magenta);color:#fff}
+.btn-primary:hover{background:var(--magenta-d)}
+.btn-line{border-color:var(--ink);color:var(--ink);background:transparent}
+.btn-line:hover{background:var(--ink);color:#fff}
+.btn-light{background:#fff;color:var(--navy)}
+.btn-light:hover{background:#dfeaf5}
+.btn-sm{min-height:40px;padding:.4rem 1.1rem;font-size:.95rem}
+
+/* ---------- Barra superior ---------- */
+.nav{position:sticky;top:0;z-index:60;background:rgba(237,241,244,.86);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);border-bottom:1px solid var(--line)}
+.nav .wrap{display:flex;align-items:center;gap:28px;height:68px}
+.brand{display:flex;align-items:center;gap:.6rem;font-family:var(--display);font-weight:600;font-size:1.4rem;text-decoration:none;letter-spacing:.01em}
+.brand svg{width:32px;height:32px;flex:none}
+.brand span{white-space:nowrap}
+.nav-links{display:flex;gap:26px;margin-left:auto}
+.nav-links a{text-decoration:none;color:var(--ink2);font-size:.97rem;padding:.4rem 0;border-bottom:2px solid transparent}
+.nav-links a:hover{color:var(--ink);border-bottom-color:var(--magenta)}
+.nav .btn{margin-left:4px}
+
+/* ---------- Inicio ---------- */
+.hero{padding:72px 0 88px;overflow:hidden}
+.contours{position:absolute;right:-14%;top:-18%;width:92%;height:auto;color:var(--navy);opacity:.075;pointer-events:none}
+.hero-grid{position:relative;display:grid;grid-template-columns:minmax(0,1.05fr) minmax(0,.95fr);gap:56px;align-items:center}
+.hero h1{font-size:clamp(2.7rem,5.6vw,4.8rem);font-weight:700;line-height:.97;margin-bottom:1.4rem}
+.hero .lead{margin-bottom:2rem}
+.hero-cta{display:flex;gap:.8rem;flex-wrap:wrap}
+.hero-note{margin-top:1.6rem;font-size:.92rem;color:var(--ink2);max-width:44ch}
+
+.ai{position:relative;width:min(470px,100%);margin-inline:auto}
+.ai svg{display:block;width:100%;height:auto;filter:drop-shadow(0 34px 38px rgba(11,31,51,.3))}
+.ai-read{display:flex;justify-content:center;gap:44px;margin-top:20px}
+.ai-read div{text-align:center}
+.ai-read span{display:block;font-size:.88rem;color:var(--ink2)}
+.ai-read b{display:block;font-family:var(--display);font-weight:600;font-size:1.9rem;line-height:1.1;font-variant-numeric:tabular-nums;min-width:7.5ch}
+.ai-hint{text-align:center;font-size:.9rem;color:var(--ink2);margin:.6rem 0 0}
+
+/* ---------- Cinta de rumbo ---------- */
+.tape{position:relative;height:78px;background:var(--navy);color:#bcd0e4;overflow:hidden;border-block:1px solid var(--navy3)}
+.tape-track{position:absolute;left:0;top:0;height:100%;will-change:transform}
+.tick{position:absolute;bottom:0;width:1px;background:#6f8aa6;transform:translateX(-.5px)}
+.tick.s{height:12px}
+.tick.m{height:22px;background:#9bb6d1}
+.tick-l{position:absolute;bottom:28px;transform:translateX(-50%);font-family:var(--display);font-size:1.15rem;font-weight:500;letter-spacing:.04em;font-variant-numeric:tabular-nums}
+.tick-l.c{color:#ff7fb8;font-weight:700;font-size:1.4rem}
+.tape-read{position:absolute;left:50%;top:0;transform:translateX(-50%);height:100%;display:flex;flex-direction:column;align-items:center;justify-content:flex-start;pointer-events:none}
+.tape-read i{display:block;width:0;height:0;border-left:8px solid transparent;border-right:8px solid transparent;border-top:12px solid var(--magenta)}
+.tape-read b{margin-top:6px;background:var(--navy);padding:0 14px;border:1.5px solid var(--magenta);border-radius:8px;font-family:var(--display);font-size:1.5rem;font-weight:600;color:#fff;font-variant-numeric:tabular-nums;line-height:1.5}
+.tape::before,.tape::after{content:"";position:absolute;top:0;bottom:0;width:140px;z-index:2;pointer-events:none}
+.tape::before{left:0;background:linear-gradient(90deg,var(--navy),transparent)}
+.tape::after{right:0;background:linear-gradient(270deg,var(--navy),transparent)}
+
+/* ---------- Cómo funciona ---------- */
+.how-head{max-width:36rem;margin-bottom:64px}
+.how-head h2{margin-bottom:1rem}
+.steps{position:relative;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:40px;--p:0}
+.steps::before{content:"";position:absolute;left:20px;right:20px;top:20px;height:2px;background:linear-gradient(90deg,var(--magenta) calc(var(--p)*100%),var(--line) calc(var(--p)*100%))}
+.step{position:relative;padding-top:64px}
+.step .n{position:absolute;left:0;top:0;width:42px;height:42px;border-radius:50%;background:var(--navy);color:#fff;display:grid;place-items:center;font-family:var(--display);font-weight:600;font-size:1.3rem;box-shadow:0 0 0 6px var(--paper)}
+.step h3{margin-bottom:.6rem}
+.step p{color:var(--ink2);max-width:30ch}
+
+/* ---------- Programa ---------- */
+.program{background:var(--paper2)}
+.prog-grid{display:grid;grid-template-columns:minmax(0,.8fr) minmax(0,1.2fr);gap:72px;align-items:start}
+.prog-side{position:sticky;top:110px}
+.prog-side h2{margin-bottom:1rem}
+.prog-stats{display:flex;gap:36px;margin-top:2rem}
+.prog-stats b{display:block;font-family:var(--display);font-size:3rem;font-weight:600;line-height:1}
+.prog-stats span{font-size:.92rem;color:var(--ink2)}
+.acc{border-top:1.5px solid var(--ink)}
+.acc details{border-bottom:1px solid var(--line2,#b9c8d8)}
+.acc summary{list-style:none;display:grid;grid-template-columns:minmax(0,1fr) auto;gap:6px 16px;align-items:center;padding:22px 0;cursor:pointer}
+.acc summary::-webkit-details-marker{display:none}
+.acc summary h3{font-size:1.85rem}
+.acc summary .lv{font-size:.9rem;color:var(--ink2);grid-column:1}
+.acc summary .pm{grid-row:1/span 2;grid-column:2;width:38px;height:38px;border-radius:50%;border:1.5px solid var(--ink);display:grid;place-items:center;transition:background .18s,color .18s,transform .25s}
+.acc summary .pm svg{width:16px;height:16px;transition:transform .25s}
+.acc summary:hover .pm{background:var(--ink);color:#fff}
+.acc details[open] summary .pm{background:var(--magenta);border-color:var(--magenta);color:#fff}
+.acc details[open] summary .pm svg{transform:rotate(45deg)}
+.acc .body{padding:0 0 26px;max-width:54ch}
+.acc .body p{color:var(--ink2)}
+.les{list-style:none;margin:1.2rem 0 0;padding:0;display:grid;gap:2px}
+.les li{display:flex;align-items:baseline;gap:14px;padding:.55rem 0;border-top:1px dashed #b9c8d8}
+.les li:first-child{border-top:0}
+.les .t{flex:1}
+.les .m{font-size:.88rem;color:var(--ink2);font-variant-numeric:tabular-nums}
+.les .d{width:9px;height:9px;border-radius:50%;background:var(--sky);flex:none;transform:translateY(-1px)}
+
+/* ---------- Herramientas (oscuro) ---------- */
+.lab{background:var(--navy);color:#e6eef7;overflow:hidden}
+.lab .contours{color:#fff;opacity:.05;left:-30%;right:auto;top:auto;bottom:-40%;width:90%}
+.lab .wrap{position:relative}
+.lab-head{max-width:40rem;margin-bottom:44px}
+.lab-head h2{margin-bottom:1rem;color:#fff}
+.lab-head p{color:#a9bfd6;font-size:1.12rem}
+.tabs{display:flex;gap:6px;border-bottom:1px solid var(--navy3);margin-bottom:36px;overflow-x:auto}
+.tabs button{background:none;border:0;padding:.85rem 1.3rem;color:#9bb3cc;font-size:1.02rem;font-weight:500;cursor:pointer;border-bottom:3px solid transparent;margin-bottom:-1px;white-space:nowrap}
+.tabs button:hover{color:#fff}
+.tabs button[aria-selected=true]{color:#fff;border-bottom-color:var(--magenta)}
+.panel[hidden]{display:none}
+.tool-grid{display:grid;grid-template-columns:minmax(0,.9fr) minmax(0,1.1fr);gap:48px;align-items:start}
+.controls{display:grid;gap:20px}
+.ctl label{display:flex;justify-content:space-between;align-items:baseline;font-size:.95rem;color:#c3d4e6;margin-bottom:6px}
+.ctl label small{color:#7e98b3;font-size:.82rem}
+.ctl .in{display:grid;grid-template-columns:1fr 96px;gap:14px;align-items:center}
+input[type=range]{width:100%;accent-color:var(--magenta);height:28px;cursor:pointer}
+.num,.txt,.sel{width:100%;background:#0f2a45;border:1px solid var(--navy3);color:#fff;border-radius:var(--r-sm);padding:.5rem .7rem;min-height:44px}
+.num{font-variant-numeric:tabular-nums;text-align:right}
+.num:focus,.txt:focus,.sel:focus{outline:none;border-color:var(--sky);box-shadow:0 0 0 3px rgba(74,155,224,.28)}
+.out-grid{display:grid;grid-template-columns:repeat(6,1fr);gap:12px;margin:0 0 20px}
+.out{grid-column:span 2;background:#0f2a45;border:1px solid var(--navy3);border-radius:var(--r);padding:14px 16px}
+.out.big{grid-column:span 3}
+.out dt{font-size:.86rem;color:#9bb3cc;margin:0}
+.out dd{margin:2px 0 0;font-family:var(--display);font-size:2.2rem;font-weight:600;line-height:1.1;font-variant-numeric:tabular-nums;color:#fff}
+.out.big dd{font-size:2.9rem}
+.out dd small{font-size:1rem;font-weight:500;color:#9bb3cc;margin-left:4px}
+.viz{background:#0f2a45;border:1px solid var(--navy3);border-radius:var(--r);padding:8px}
+.viz svg{display:block;width:100%;height:auto}
+.legend{display:flex;gap:18px;flex-wrap:wrap;padding:8px 12px 10px;font-size:.85rem;color:#a9bfd6}
+.legend i{display:inline-block;width:18px;height:3px;border-radius:2px;vertical-align:middle;margin-right:6px}
+.warn{display:none;background:#4a1d24;border:1px solid #8c3a44;color:#ffd5d9;border-radius:var(--r-sm);padding:.7rem .9rem;margin-bottom:16px;font-size:.95rem}
+.warn.show{display:block}
+.fine{margin-top:22px;font-size:.85rem;color:#7e98b3;max-width:70ch}
+
+/* METAR */
+.mono{font-family:var(--mono);font-size:.95rem;letter-spacing:.02em}
+.txt.mono{min-height:88px;resize:vertical;line-height:1.5;text-transform:uppercase}
+.chips{display:flex;flex-wrap:wrap;gap:8px;margin-top:10px}
+.chip{background:transparent;border:1px solid var(--navy3);color:#c3d4e6;border-radius:999px;padding:.35rem .9rem;font-size:.88rem;cursor:pointer}
+.chip:hover{border-color:var(--sky);color:#fff}
+.decoded{margin:0;display:grid;gap:0}
+.decoded .rw{display:grid;grid-template-columns:150px minmax(0,1fr);gap:16px;padding:12px 0;border-bottom:1px solid var(--navy3)}
+.decoded .rw:first-child{border-top:1px solid var(--navy3)}
+.decoded dt{color:#9bb3cc;font-size:.93rem}
+.decoded dd{margin:0}
+.badge{display:inline-block;padding:.12rem .7rem;border-radius:999px;font-weight:600;font-size:.88rem;margin-left:6px;vertical-align:1px}
+.b-vfr{background:#14583a;color:#aef0cf}.b-mvfr{background:#17406e;color:#bcdcff}.b-ifr{background:#6b1e2a;color:#ffc9d0}.b-lifr{background:#5b1b57;color:#f6c6f2}
+.err{color:#ffb3bb}
+
+/* Mini examen */
+.quiz{max-width:760px}
+.q-top{display:flex;justify-content:space-between;align-items:center;margin-bottom:18px;color:#9bb3cc;font-size:.95rem}
+.dots{display:flex;gap:8px}
+.dots i{width:28px;height:5px;border-radius:3px;background:var(--navy3)}
+.dots i.on{background:var(--sky)}.dots i.ok{background:var(--green)}.dots i.no{background:var(--red)}
+.q-text{font-family:var(--display);font-size:clamp(1.7rem,3.2vw,2.3rem);font-weight:600;line-height:1.12;margin-bottom:22px;color:#fff}
+.opts{display:grid;gap:10px}
+.opt{text-align:left;background:#0f2a45;border:1.5px solid var(--navy3);border-radius:var(--r);padding:.95rem 1.2rem;color:#e6eef7;cursor:pointer;display:flex;gap:14px;align-items:flex-start;transition:border-color .15s,background .15s}
+.opt:hover:not(:disabled){border-color:var(--sky)}
+.opt b{font-family:var(--display);font-size:1.2rem;color:#7e98b3;min-width:1.2ch}
+.opt.right{border-color:var(--green);background:#0f3a33}
+.opt.wrong{border-color:var(--red);background:#40202a}
+.opt:disabled{cursor:default}
+.explain{margin-top:18px;padding:14px 18px;border-left:3px solid var(--sky);background:#0f2a45;border-radius:0 var(--r-sm) var(--r-sm) 0;color:#cfe0f2;display:none}
+.explain.show{display:block}
+.q-actions{margin-top:20px;display:flex;gap:12px}
+.score{font-family:var(--display);font-size:5rem;font-weight:700;line-height:1;color:#fff}
+
+/* ---------- Qué incluye ---------- */
+.feat-grid{display:grid;grid-template-columns:minmax(0,1.05fr) minmax(0,.95fr);gap:72px;align-items:center}
+.feat-list{margin:2rem 0 0;padding:0;list-style:none;border-top:1.5px solid var(--ink)}
+.feat-list li{display:grid;grid-template-columns:44px 1fr;gap:6px 14px;padding:18px 0;border-bottom:1px solid var(--line)}
+.feat-list svg{width:28px;height:28px;color:var(--magenta);grid-row:1/span 2;margin-top:2px}
+.feat-list b{font-family:var(--display);font-size:1.4rem;font-weight:600;line-height:1.1}
+.feat-list span{color:var(--ink2);font-size:.97rem;grid-column:2}
+.soon{display:inline-block;margin-left:8px;padding:0 .6rem;border-radius:999px;background:var(--paper2);color:var(--ink2);font-family:var(--body);font-size:.78rem;font-weight:500;vertical-align:3px}
+
+.mock{background:var(--surface);border:1px solid var(--line);border-radius:18px;box-shadow:0 40px 70px -30px rgba(11,31,51,.35);overflow:hidden}
+.mock-bar{display:flex;align-items:center;gap:7px;padding:11px 14px;background:#f4f7f9;border-bottom:1px solid var(--line)}
+.mock-bar i{width:10px;height:10px;border-radius:50%;background:#cbd6e0}
+.mock-bar span{margin-left:10px;font-size:.78rem;color:var(--ink3);font-family:var(--mono)}
+.mock-body{display:grid;grid-template-columns:132px 1fr;min-height:420px}
+.mock-side{background:var(--navy);color:#c3d3e4;padding:16px 10px;font-size:.82rem;display:grid;gap:3px;align-content:start}
+.mock-side b{display:flex;align-items:center;gap:6px;color:#fff;font-family:var(--display);font-size:1rem;font-weight:600;padding:2px 6px 12px}
+.mock-side b svg{width:20px;height:20px}
+.mock-side span{padding:7px 8px;border-radius:7px}
+.mock-side span.on{background:#fff;color:var(--navy);font-weight:500}
+.mock-main{padding:20px 20px 24px;background:var(--paper)}
+.mock-main h4{font-size:1.6rem;margin-bottom:2px}
+.mock-main .sub{font-size:.8rem;color:var(--ink2);margin-bottom:14px}
+.m-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:12px}
+.m-stats div{background:#fff;border:1px solid var(--line);border-radius:9px;padding:8px 10px}
+.m-stats b{display:block;font-family:var(--display);font-size:1.7rem;font-weight:600;line-height:1}
+.m-stats span{font-size:.7rem;color:var(--ink2)}
+.m-resume{background:var(--navy);color:#fff;border-radius:11px;padding:13px 15px;margin-bottom:12px;display:flex;justify-content:space-between;align-items:center;gap:10px}
+.m-resume small{color:#8ea6c0;font-size:.7rem;display:block}
+.m-resume b{font-family:var(--display);font-size:1.25rem;font-weight:600;line-height:1.1;display:block}
+.m-resume em{font-style:normal;background:#fff;color:var(--navy);font-size:.72rem;font-weight:500;padding:.3rem .7rem;border-radius:99px;white-space:nowrap}
+.m-course{background:#fff;border:1px solid var(--line);border-radius:10px;padding:11px 13px;margin-bottom:8px}
+.m-course b{font-family:var(--display);font-size:1.15rem;font-weight:600}
+.m-course small{display:flex;justify-content:space-between;color:var(--ink2);font-size:.7rem;margin:2px 0 6px}
+.m-bar{height:6px;border-radius:99px;background:#dfe7ef;overflow:hidden}
+.m-bar i{display:block;height:100%;background:var(--magenta);border-radius:99px}
+.m-bar.full i{background:var(--green)}
+
+/* ---------- Preguntas ---------- */
+.faq{background:var(--paper2)}
+.faq-grid{display:grid;grid-template-columns:minmax(0,.7fr) minmax(0,1.3fr);gap:72px}
+.faq .acc summary h3{font-size:1.45rem;font-family:var(--body);font-weight:500;line-height:1.3}
+.faq .acc .body p{margin:0}
+
+/* ---------- Cierre ---------- */
+.closing{background:var(--navy);color:#fff;text-align:center;overflow:hidden;padding:120px 0}
+.closing .contours{color:#fff;opacity:.07;left:50%;right:auto;top:50%;transform:translate(-50%,-50%);width:120%;max-width:1500px}
+.closing .wrap{position:relative}
+.closing h2{font-size:clamp(2.6rem,6vw,4.8rem);max-width:15ch;margin:0 auto 1.2rem;font-weight:700}
+.closing p{color:#a9bfd6;max-width:46ch;margin:0 auto 2.2rem;font-size:1.15rem}
+footer{background:#071524;color:#7e98b3;padding:34px 0;font-size:.9rem}
+footer .wrap{display:flex;gap:24px;justify-content:space-between;flex-wrap:wrap}
+footer p{margin:0;max-width:62ch}
+footer a{color:#a9bfd6}
+
+/* ---------- Pantallas chicas ---------- */
+@media (max-width:980px){
+  section{padding:76px 0}
+  .hero{padding-top:44px}
+  .hero-grid,.prog-grid,.feat-grid,.faq-grid,.tool-grid{grid-template-columns:1fr;gap:44px}
+  .prog-side{position:static}
+  .contours{right:-40%;width:130%}
+  .nav-links{display:none}
+  .nav .btn{margin-left:auto}
+}
+@media (max-width:720px){
+  body{font-size:16px}
+  .wrap{padding:0 18px}
+  .steps{grid-template-columns:1fr;gap:34px}
+  .steps::before{left:20px;right:auto;top:20px;bottom:20px;width:2px;height:auto;background:linear-gradient(180deg,var(--magenta) calc(var(--p)*100%),var(--line) calc(var(--p)*100%))}
+  .step{padding:4px 0 0 64px}
+  .out-grid{grid-template-columns:repeat(2,1fr)}
+  .out,.out.big{grid-column:span 1}
+  .out.big{grid-column:span 2}
+  .decoded .rw{grid-template-columns:1fr;gap:2px}
+  .mock-body{grid-template-columns:1fr}
+  .mock-side{display:none}
+  .ai-read{gap:20px}
+  .tape::before,.tape::after{width:60px}
+  .prog-stats{gap:24px}
+  .nav .wrap{gap:12px}
+  .brand{font-size:1.15rem}
+  .brand svg{width:28px;height:28px}
+}
+@media (max-width:400px){
+  .brand{font-size:1.02rem}
+}
+@media (prefers-reduced-motion:reduce){
+  html{scroll-behavior:auto}
+  *{transition:none!important;animation:none!important}
+}
+</style>
+</head>
+<body>
+<a class="skip" href="#contenido">Ir al contenido</a>
+
+<header class="nav">
+  <div class="wrap">
+    <a class="brand" href="#inicio" aria-label="Campus Piloto Privado, inicio">
+      <svg viewBox="0 0 40 40" fill="none" aria-hidden="true"><circle cx="20" cy="20" r="17" stroke="#0b1f33" stroke-width="2"/><path d="M20 7l4.2 13.5L20 33l-4.2-12.5z" fill="#b3236b"/><path d="M20 7l-4.2 13.5L20 33" stroke="#0b1f33" stroke-width="1.5" fill="none"/><circle cx="20" cy="20" r="2.2" fill="#0b1f33"/></svg>
+      <span>Campus Piloto Privado</span>
+    </a>
+    <nav class="nav-links" aria-label="Secciones">
+      <a href="#como">Cómo funciona</a>
+      <a href="#programa">Programa</a>
+      <a href="#herramientas">Herramientas</a>
+      <a href="#preguntas">Preguntas</a>
+    </nav>
+    <a class="btn btn-primary btn-sm" href="index.html">Ingresar</a>
+  </div>
+</header>
+
+<main id="contenido">
+
+<!-- ===================== INICIO ===================== -->
+<section class="hero" id="inicio">
+  <svg class="contours" id="c-hero" aria-hidden="true"></svg>
+  <div class="wrap hero-grid">
+    <div>
+      <h1>Estudiá para piloto privado como si ya estuvieras en cabina.</h1>
+      <p class="lead">Lecciones en video, herramientas de navegación que funcionan de verdad y el seguimiento de tu avance. Toda la teoría en un solo campus.</p>
+      <div class="hero-cta">
+        <a class="btn btn-primary" href="index.html">Crear mi cuenta</a>
+        <a class="btn btn-line" href="#herramientas">Probar las herramientas</a>
+      </div>
+      <p class="hero-note">Para quienes se están preparando para el examen teórico de piloto privado. La instrucción de vuelo se hace siempre con un instructor.</p>
+    </div>
+
+    <figure class="ai" style="margin:0">
+      <svg id="ai" viewBox="0 0 400 400" role="img" aria-label="Horizonte artificial interactivo que se inclina siguiendo el mouse">
+        <defs>
+          <clipPath id="ai-clip"><circle cx="200" cy="200" r="158"/></clipPath>
+          <linearGradient id="g-sky" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#1f66ad"/><stop offset="1" stop-color="#78b4e8"/></linearGradient>
+          <linearGradient id="g-gnd" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#8a5a35"/><stop offset="1" stop-color="#4a2e1a"/></linearGradient>
+          <radialGradient id="g-glare" cx=".32" cy=".24" r=".8"><stop offset="0" stop-color="#fff" stop-opacity=".2"/><stop offset=".5" stop-color="#fff" stop-opacity="0"/></radialGradient>
+          <linearGradient id="g-bezel" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#1b3a5c"/><stop offset="1" stop-color="#07131f"/></linearGradient>
+        </defs>
+        <circle cx="200" cy="200" r="196" fill="url(#g-bezel)"/>
+        <circle cx="200" cy="200" r="190" fill="none" stroke="#2f5a86" stroke-width="1.5" stroke-opacity=".7"/>
+        <!-- escala de alabeo (fija) -->
+        <g id="ai-scale" stroke="#cfe0f2" stroke-linecap="round"></g>
+        <!-- puntero de alabeo (se mueve) -->
+        <g id="ai-ptr"><path d="M200 36 l-9 -17 h18z" fill="#b3236b" stroke="#ff7fb8" stroke-width="1" stroke-linejoin="round"/></g>
+        <!-- mundo -->
+        <g clip-path="url(#ai-clip)">
+          <g id="ai-world">
+            <rect x="-400" y="-600" width="1200" height="800" fill="url(#g-sky)"/>
+            <rect x="-400" y="200" width="1200" height="800" fill="url(#g-gnd)"/>
+            <line x1="-400" y1="200" x2="800" y2="200" stroke="#fff" stroke-width="2.5"/>
+            <g id="ai-ladder" stroke="#fff" stroke-width="2" fill="#fff" font-family="Barlow Condensed,sans-serif" font-size="15" font-weight="600" text-anchor="middle"></g>
+          </g>
+          <circle cx="200" cy="200" r="158" fill="url(#g-glare)"/>
+        </g>
+        <circle cx="200" cy="200" r="158" fill="none" stroke="#07131f" stroke-width="3"/>
+        <!-- avión (fijo) -->
+        <g fill="none" stroke="#f0b429" stroke-width="7" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M110 200h62l14 16"/>
+          <path d="M290 200h-62l-14 16"/>
+        </g>
+        <circle cx="200" cy="200" r="6" fill="#f0b429"/>
+      </svg>
+      <div class="ai-read" aria-live="off">
+        <div><span>Alabeo</span><b id="r-roll">0° derecha</b></div>
+        <div><span>Cabeceo</span><b id="r-pitch">0° arriba</b></div>
+      </div>
+      <p class="ai-hint" id="ai-hint">Mové el mouse y el horizonte te sigue.</p>
+    </figure>
+  </div>
+</section>
+
+<!-- Cinta de rumbo: avanza con el scroll -->
+<div class="tape" role="img" aria-label="Cinta de rumbo decorativa que se desplaza al bajar por la página">
+  <div class="tape-track" id="tape-track"></div>
+  <div class="tape-read"><i></i><b id="tape-num">000°</b></div>
+</div>
+
+<!-- ===================== CÓMO FUNCIONA ===================== -->
+<section id="como">
+  <div class="wrap">
+    <div class="how-head">
+      <h2>De cero al examen, lección por lección.</h2>
+      <p class="lead">Sin armar planillas ni buscar apuntes sueltos. Cada paso queda ordenado y guardado.</p>
+    </div>
+    <div class="steps" id="steps">
+      <div class="step"><span class="n">1</span><h3>Elegís un curso</h3><p>Reglamento, meteorología, navegación y aerodinámica, en el orden que te conviene.</p></div>
+      <div class="step"><span class="n">2</span><h3>Estudiás con video y texto</h3><p>Cada lección tiene su clase en video y un resumen escrito para repasar.</p></div>
+      <div class="step"><span class="n">3</span><h3>Seguís tu avance</h3><p>Marcás lo que terminaste y el campus te deja justo en la próxima lección.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== PROGRAMA ===================== -->
+<section class="program" id="programa">
+  <div class="wrap prog-grid">
+    <div class="prog-side">
+      <h2>Cuatro materias, una sola secuencia.</h2>
+      <p class="lead">Abrí cada materia para ver las lecciones que la forman.</p>
+      <div class="prog-stats">
+        <div><b>4</b><span>materias</span></div>
+        <div><b>13</b><span>lecciones iniciales</span></div>
+      </div>
+    </div>
+    <div class="acc">
+      <details open>
+        <summary><h3>Reglamento aeronáutico</h3><span class="lv">Nivel básico · 3 lecciones</span><span class="pm"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M8 2v12M2 8h12"/></svg></span></summary>
+        <div class="body"><p>El marco normativo de la aviación civil: quién regula, qué licencias existen y cómo se vuela dentro de las reglas.</p>
+          <ul class="les"><li><i class="d"></i><span class="t">Introducción al marco normativo</span><span class="m">10 min</span></li><li><i class="d"></i><span class="t">Licencias y habilitaciones</span><span class="m">15 min</span></li><li><i class="d"></i><span class="t">Reglas del aire: conceptos básicos</span><span class="m">20 min</span></li></ul></div>
+      </details>
+      <details>
+        <summary><h3>Meteorología para pilotos</h3><span class="lv">Nivel básico · 4 lecciones</span><span class="pm"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M8 2v12M2 8h12"/></svg></span></summary>
+        <div class="body"><p>La atmósfera, los fenómenos que afectan al vuelo y cómo leer los informes que usás antes de cada despegue.</p>
+          <ul class="les"><li><i class="d"></i><span class="t">La atmósfera estándar</span><span class="m">10 min</span></li><li><i class="d"></i><span class="t">Viento, presión y temperatura</span><span class="m">15 min</span></li><li><i class="d"></i><span class="t">Nubes y fenómenos peligrosos</span><span class="m">20 min</span></li><li><i class="d"></i><span class="t">Lectura de METAR y TAF</span><span class="m">25 min</span></li></ul></div>
+      </details>
+      <details>
+        <summary><h3>Navegación aérea</h3><span class="lv">Nivel intermedio · 3 lecciones</span><span class="pm"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M8 2v12M2 8h12"/></svg></span></summary>
+        <div class="body"><p>Cartas, rumbos, navegación estimada y radioayudas. Es la materia donde más sirve la calculadora de viento de esta página.</p>
+          <ul class="les"><li><i class="d"></i><span class="t">Cartas, rumbos y derrota</span><span class="m">10 min</span></li><li><i class="d"></i><span class="t">Navegación estimada</span><span class="m">15 min</span></li><li><i class="d"></i><span class="t">Radioayudas (VOR y NDB)</span><span class="m">20 min</span></li></ul></div>
+      </details>
+      <details>
+        <summary><h3>Aerodinámica y performance</h3><span class="lv">Nivel intermedio · 3 lecciones</span><span class="pm"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M8 2v12M2 8h12"/></svg></span></summary>
+        <div class="body"><p>Las fuerzas sobre la aeronave, la pérdida de sustentación y cómo calcular peso y balanceo antes de volar.</p>
+          <ul class="les"><li><i class="d"></i><span class="t">Las cuatro fuerzas</span><span class="m">10 min</span></li><li><i class="d"></i><span class="t">Pérdida y barrena</span><span class="m">15 min</span></li><li><i class="d"></i><span class="t">Peso y balanceo</span><span class="m">20 min</span></li></ul></div>
+      </details>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== HERRAMIENTAS ===================== -->
+<section class="lab" id="herramientas">
+  <svg class="contours" id="c-lab" aria-hidden="true"></svg>
+  <div class="wrap">
+    <div class="lab-head">
+      <h2>Probá el campus antes de registrarte.</h2>
+      <p>Tres herramientas que vas a usar en las lecciones. Funcionan acá mismo, sin crear cuenta.</p>
+    </div>
+
+    <div class="tabs" role="tablist" aria-label="Herramientas">
+      <button role="tab" id="tab-viento" aria-selected="true" aria-controls="p-viento">Calculadora de viento</button>
+      <button role="tab" id="tab-metar" aria-selected="false" aria-controls="p-metar" tabindex="-1">Decodificador de METAR</button>
+      <button role="tab" id="tab-quiz" aria-selected="false" aria-controls="p-quiz" tabindex="-1">Mini examen</button>
+    </div>
+
+    <!-- Viento -->
+    <div class="panel" role="tabpanel" id="p-viento" aria-labelledby="tab-viento">
+      <div class="tool-grid">
+        <div class="controls">
+          <div class="ctl"><label for="n-tc">Ruta deseada <small>grados verdaderos</small></label><div class="in"><input type="range" id="r-tc" min="0" max="359" value="90" aria-label="Ruta deseada"><input class="num" type="number" id="n-tc" min="0" max="360" value="90"></div></div>
+          <div class="ctl"><label for="n-tas">Velocidad del avión <small>TAS, en nudos</small></label><div class="in"><input type="range" id="r-tas" min="40" max="220" value="105" aria-label="Velocidad del avión"><input class="num" type="number" id="n-tas" min="40" max="400" value="105"></div></div>
+          <div class="ctl"><label for="n-wd">Viento desde <small>grados</small></label><div class="in"><input type="range" id="r-wd" min="0" max="359" value="160" aria-label="Dirección del viento"><input class="num" type="number" id="n-wd" min="0" max="360" value="160"></div></div>
+          <div class="ctl"><label for="n-ws">Velocidad del viento <small>nudos</small></label><div class="in"><input type="range" id="r-ws" min="0" max="60" value="18" aria-label="Velocidad del viento"><input class="num" type="number" id="n-ws" min="0" max="120" value="18"></div></div>
+          <div class="ctl"><label for="n-dist">Distancia <small>millas náuticas</small></label><div class="in"><input type="range" id="r-dist" min="10" max="500" value="120" aria-label="Distancia"><input class="num" type="number" id="n-dist" min="1" max="2000" value="120"></div></div>
+          <div class="ctl"><label for="n-burn">Consumo <small>litros por hora</small></label><div class="in"><input type="range" id="r-burn" min="10" max="120" value="38" aria-label="Consumo"><input class="num" type="number" id="n-burn" min="1" max="300" value="38"></div></div>
+        </div>
+        <div>
+          <div class="warn" id="w-warn" role="alert"></div>
+          <dl class="out-grid">
+            <div class="out big"><dt>Rumbo a volar</dt><dd id="o-hdg">—</dd></div>
+            <div class="out big"><dt>Velocidad sobre el suelo</dt><dd id="o-gs">—</dd></div>
+            <div class="out"><dt>Corrección de deriva</dt><dd id="o-wca">—</dd></div>
+            <div class="out"><dt>Tiempo en ruta</dt><dd id="o-time">—</dd></div>
+            <div class="out"><dt>Combustible</dt><dd id="o-fuel">—</dd></div>
+          </dl>
+          <div class="viz">
+            <svg id="wind-svg" viewBox="0 0 440 300" role="img" aria-label="Triángulo de viento">
+              <defs>
+                <marker id="ar-air" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0l10 5-10 5z" fill="#4a9be0"/></marker>
+                <marker id="ar-wind" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0l10 5-10 5z" fill="#f0b429"/></marker>
+                <marker id="ar-gnd" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0l10 5-10 5z" fill="#ffffff"/></marker>
+              </defs>
+              <g id="wind-g"></g>
+            </svg>
+            <div class="legend"><span><i style="background:#4a9be0"></i>Rumbo y velocidad del avión</span><span><i style="background:#f0b429"></i>Viento (hacia donde sopla)</span><span><i style="background:#fff"></i>Ruta sobre el suelo</span></div>
+          </div>
+        </div>
+      </div>
+      <p class="fine">Herramienta educativa. Ignora la variación magnética y el desvío del compás. No la uses para planificar un vuelo real.</p>
+    </div>
+
+    <!-- METAR -->
+    <div class="panel" role="tabpanel" id="p-metar" aria-labelledby="tab-metar" hidden>
+      <div class="tool-grid">
+        <div class="controls">
+          <div class="ctl"><label for="metar-in">Pegá un METAR</label>
+            <textarea class="txt mono" id="metar-in" rows="3" spellcheck="false" autocapitalize="characters">SABE 311500Z 22015G25KT 6000 -RA BKN012 OVC030 14/12 Q1008</textarea>
+            <div class="chips" aria-label="Ejemplos">
+              <button type="button" class="chip" data-metar="SABE 311500Z 22015G25KT 6000 -RA BKN012 OVC030 14/12 Q1008">Lluvia y nubes bajas</button>
+              <button type="button" class="chip" data-metar="SAEZ 311500Z 18008KT CAVOK 24/11 Q1016">Cielo despejado</button>
+              <button type="button" class="chip" data-metar="SACO 311100Z 00000KT 0400 FG VV002 08/08 Q1021">Niebla</button>
+              <button type="button" class="chip" data-metar="SAME 311500Z 27022G34KT 9999 TS SCT040CB 29/09 Q1004">Tormenta</button>
+            </div>
+          </div>
+          <div class="ctl"><label for="rwy">Rumbo de la pista <small>opcional, en grados</small></label><div class="in" style="grid-template-columns:96px 1fr"><input class="num" type="number" id="rwy" min="0" max="360" placeholder="110"><span style="color:#7e98b3;font-size:.88rem">Calcula viento de frente y cruzado</span></div></div>
+        </div>
+        <dl class="decoded" id="metar-out"></dl>
+      </div>
+      <p class="fine">Los ejemplos son inventados con fines didácticos, no son informes reales. La categoría de vuelo es una referencia general; para volar usá siempre la información oficial.</p>
+    </div>
+
+    <!-- Mini examen -->
+    <div class="panel" role="tabpanel" id="p-quiz" aria-labelledby="tab-quiz" hidden>
+      <div class="quiz" id="quiz"></div>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== QUÉ INCLUYE ===================== -->
+<section id="incluye">
+  <div class="wrap feat-grid">
+    <div>
+      <h2>Todo lo que necesitás para estudiar, en un lugar.</h2>
+      <ul class="feat-list">
+        <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M10 9.5v5l4.5-2.5z"/></svg><b>Video y texto en cada lección</b><span>Mirá la clase y repasá con el resumen escrito.</span></li>
+        <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 19V5M4 19h16"/><path d="M8 15l4-4 3 3 5-6"/></svg><b>Avance guardado</b><span>Retomás justo donde lo dejaste, desde el celular o la computadora.</span></li>
+        <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 4h10a3 3 0 0 1 3 3v13H8a3 3 0 0 1-3-3z"/><path d="M5 17a3 3 0 0 1 3-3h10"/></svg><b>Cursos en orden</b><span>Cuatro materias que se van apoyando una en otra.</span></li>
+        <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="8" r="3.5"/><path d="M5 20a7 7 0 0 1 14 0"/></svg><b>Panel para el instructor</b><span>Se cargan cursos, lecciones y videos sin tocar código.</span></li>
+        <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 11l3 3 8-8"/><path d="M20 12v7a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V7a2 2 0 0 1 2-2h9"/></svg><b>Simulacros de examen <em class="soon" style="font-style:normal">Próximamente</em></b><span>Preguntas de opción múltiple con corrección automática.</span></li>
+      </ul>
+    </div>
+
+    <div class="mock" role="img" aria-label="Vista previa del campus: inicio con avance de cursos">
+      <div class="mock-bar"><i></i><i></i><i></i><span>campus · inicio</span></div>
+      <div class="mock-body">
+        <div class="mock-side">
+          <b><svg viewBox="0 0 40 40" fill="none"><circle cx="20" cy="20" r="17" stroke="#fff" stroke-width="2.4"/><path d="M20 7l4.2 13.5L20 33l-4.2-12.5z" fill="#b3236b"/></svg>Campus</b>
+          <span class="on">Inicio</span><span>Mis cursos</span><span>Catálogo</span><span>Exámenes</span><span>Mi perfil</span>
+        </div>
+        <div class="mock-main">
+          <h4>Buenas tardes, Sofía</h4>
+          <div class="sub">Teórico en curso</div>
+          <div class="m-stats"><div><b>2</b><span>cursos en marcha</span></div><div><b>5</b><span>lecciones completadas</span></div><div><b>50%</b><span>de avance general</span></div></div>
+          <div class="m-resume"><div><small>Seguí donde lo dejaste</small><b>Nubes y fenómenos peligrosos</b></div><em>Continuar</em></div>
+          <div class="m-course"><b>Reglamento aeronáutico</b><small><span>3 de 3 lecciones</span><span>100%</span></small><div class="m-bar full"><i style="width:100%"></i></div></div>
+          <div class="m-course"><b>Meteorología para pilotos</b><small><span>2 de 4 lecciones</span><span>50%</span></small><div class="m-bar"><i style="width:50%"></i></div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== PREGUNTAS ===================== -->
+<section class="faq" id="preguntas">
+  <div class="wrap faq-grid">
+    <div><h2>Preguntas frecuentes.</h2></div>
+    <div class="acc">
+      <details open><summary><h3>¿Necesito experiencia previa?</h3><span class="pm"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M8 2v12M2 8h12"/></svg></span></summary><div class="body"><p>No. El programa arranca desde lo básico y va subiendo de a poco. Alcanza con querer aprender.</p></div></details>
+      <details><summary><h3>¿Puedo estudiar desde el celular?</h3><span class="pm"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M8 2v12M2 8h12"/></svg></span></summary><div class="body"><p>Sí. El campus se adapta a cualquier pantalla y tu avance se guarda en tu cuenta, así que podés empezar en una y seguir en otra.</p></div></details>
+      <details><summary><h3>¿Esto reemplaza a la escuela de vuelo?</h3><span class="pm"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M8 2v12M2 8h12"/></svg></span></summary><div class="body"><p>No. Es la parte teórica. La instrucción en el aire se hace con un instructor habilitado y las horas de vuelo se cumplen en un aeroclub o escuela.</p></div></details>
+      <details><summary><h3>¿Cómo son los videos?</h3><span class="pm"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M8 2v12M2 8h12"/></svg></span></summary><div class="body"><p>Cada lección tiene su video y un texto de apoyo. Podés pausar, volver atrás y marcar la lección como completada cuando la termines.</p></div></details>
+      <details><summary><h3>¿Cuánto cuesta?</h3><span class="pm"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M8 2v12M2 8h12"/></svg></span></summary><div class="body"><p>Los valores se van a publicar acá antes de abrir las inscripciones.</p></div></details>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== CIERRE ===================== -->
+<section class="closing">
+  <svg class="contours" id="c-end" aria-hidden="true"></svg>
+  <div class="wrap">
+    <h2>Tu primera lección te espera.</h2>
+    <p>Creá tu cuenta, elegí un curso y empezá hoy. Tu avance queda guardado.</p>
+    <a class="btn btn-light" href="index.html">Crear mi cuenta</a>
+  </div>
+</section>
+</main>
+
+<footer>
+  <div class="wrap">
+    <p>Material educativo para la preparación teórica. No reemplaza la instrucción de vuelo ni las publicaciones oficiales de la autoridad aeronáutica.</p>
+    <p><a href="index.html">Ingresar al campus</a></p>
+  </div>
+</footer>
+
+<script>
+(() => {
+'use strict';
+const $  = (s, r = document) => r.querySelector(s);
+const $$ = (s, r = document) => Array.from(r.querySelectorAll(s));
+const clamp = (v, a, b) => Math.min(b, Math.max(a, v));
+const rad = d => d * Math.PI / 180, deg = r => r * 180 / Math.PI;
+const n360 = d => ((d % 360) + 360) % 360;
+const pad3 = n => String(Math.round(n) % 360).padStart(3, '0');
+const esc = s => String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const NS = 'http://www.w3.org/2000/svg';
+const el = (tag, attrs = {}, parent) => { const e = document.createElementNS(NS, tag); for (const k in attrs) e.setAttribute(k, attrs[k]); if (parent) parent.appendChild(e); return e; };
+const REDUCE = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+const COARSE = window.matchMedia('(pointer: coarse)').matches;
+
+/* ============================================================
+   1) CURVAS DE NIVEL (fondo decorativo, generado por código)
+   ============================================================ */
+function rng(seed) { let a = seed >>> 0; return () => { a |= 0; a = a + 0x6D2B79F5 | 0; let t = Math.imul(a ^ a >>> 15, 1 | a); t = t + Math.imul(t ^ t >>> 7, 61 | t) ^ t; return ((t ^ t >>> 14) >>> 0) / 4294967296; }; }
+function contours(svg, seed, rings, r0, step) {
+  const W = 1000, H = 1000, R = rng(seed);
+  svg.setAttribute('viewBox', `0 0 ${W} ${H}`);
+  const ph = [0, 1, 2, 3].map(() => R() * Math.PI * 2);
+  const am = [.10, .07, .045, .03].map(a => a * (0.8 + R() * .5));
+  for (let i = 0; i < rings; i++) {
+    const base = r0 + i * step, pts = [];
+    for (let k = 0; k <= 180; k++) {
+      const t = k / 180 * Math.PI * 2;
+      const j = 1 + am[0] * Math.sin(2 * t + ph[0] + i * .12) + am[1] * Math.sin(3 * t + ph[1] - i * .1) + am[2] * Math.sin(5 * t + ph[2] + i * .2) + am[3] * Math.sin(8 * t + ph[3]);
+      const r = base * j;
+      pts.push((500 + r * Math.cos(t)).toFixed(1) + ' ' + (500 + r * Math.sin(t) * .86).toFixed(1));
+    }
+    el('path', { d: 'M' + pts.join('L') + 'Z', fill: 'none', stroke: 'currentColor', 'stroke-width': i % 5 === 0 ? 2.2 : 1 }, svg);
+  }
+}
+contours($('#c-hero'), 7, 22, 40, 20);
+contours($('#c-lab'), 21, 20, 50, 22);
+contours($('#c-end'), 5, 20, 60, 24);
+
+/* ============================================================
+   2) HORIZONTE ARTIFICIAL (sigue al mouse)
+   ============================================================ */
+(function () {
+  const scale = $('#ai-scale'), ladder = $('#ai-ladder'), world = $('#ai-world'), ptr = $('#ai-ptr');
+  // escala de alabeo fija, arriba
+  [-60, -45, -30, -20, -10, 0, 10, 20, 30, 45, 60].forEach(a => {
+    const long = [0, 30, -30, 60, -60, 45, -45].includes(a);
+    const r1 = 176, r2 = long ? 162 : 168, t = rad(a);
+    el('line', { x1: 200 + r1 * Math.sin(t), y1: 200 - r1 * Math.cos(t), x2: 200 + r2 * Math.sin(t), y2: 200 - r2 * Math.cos(t), 'stroke-width': long ? 3 : 2 }, scale);
+  });
+  // escalera de cabeceo (6 px por grado)
+  [5, 10, 15, 20, -5, -10, -15, -20].forEach(p => {
+    const y = 200 - p * 6, w = p % 10 === 0 ? 62 : 30;
+    el('line', { x1: 200 - w, y1: y, x2: 200 + w, y2: y }, ladder);
+    if (p % 10 === 0) {
+      const a = el('text', { x: 200 - w - 14, y: y + 5, stroke: 'none' }, ladder); a.textContent = Math.abs(p);
+      const b = el('text', { x: 200 + w + 14, y: y + 5, stroke: 'none' }, ladder); b.textContent = Math.abs(p);
+    }
+  });
+  const rRoll = $('#r-roll'), rPitch = $('#r-pitch'), hint = $('#ai-hint');
+  if (COARSE) hint.textContent = 'Es un horizonte artificial: muestra la inclinación del avión.';
+  const s = { roll: 38, pitch: -9 };
+  let mouse = null, last = 0;
+  window.addEventListener('pointermove', e => { if (e.pointerType === 'touch') return; mouse = { x: e.clientX / innerWidth, y: e.clientY / innerHeight }; last = performance.now(); }, { passive: true });
+  function apply() {
+    world.setAttribute('transform', `rotate(${(-s.roll).toFixed(2)} 200 200) translate(0 ${(s.pitch * 6).toFixed(2)})`);
+    ptr.setAttribute('transform', `rotate(${s.roll.toFixed(2)} 200 200)`);
+    rRoll.textContent = Math.round(Math.abs(s.roll)) + '° ' + (s.roll >= 0 ? 'derecha' : 'izquierda');
+    rPitch.textContent = Math.round(Math.abs(s.pitch)) + '° ' + (s.pitch >= 0 ? 'arriba' : 'abajo');
+  }
+  if (REDUCE) { s.roll = 8; s.pitch = 3; apply(); return; }
+  function frame(t) {
+    let tr, tp;
+    if (mouse && t - last < 4500) { tr = (mouse.x - .5) * 2 * 40; tp = (.5 - mouse.y) * 2 * 14; }
+    else { tr = 14 * Math.sin(t / 2700); tp = 4.5 * Math.sin(t / 3400 + 1); }
+    s.roll += (tr - s.roll) * .055; s.pitch += (tp - s.pitch) * .055;
+    apply(); requestAnimationFrame(frame);
+  }
+  requestAnimationFrame(frame);
+})();
+
+/* ============================================================
+   3) CINTA DE RUMBO (avanza con el scroll)
+   ============================================================ */
+(function () {
+  const track = $('#tape-track'), num = $('#tape-num'), tape = track.parentElement, PX = 9;
+  const frag = document.createDocumentFragment();
+  for (let d = -360; d <= 1080; d += 5) {
+    const dd = n360(d), t = document.createElement('div');
+    const major = dd % 10 === 0;
+    t.className = 'tick ' + (major ? 'm' : 's'); t.style.left = (d * PX) + 'px'; frag.appendChild(t);
+    if (major) {
+      const l = document.createElement('div'); l.className = 'tick-l';
+      const card = { 0: 'N', 90: 'E', 180: 'S', 270: 'O' }[dd];
+      l.textContent = card || String(dd).padStart(3, '0'); if (card) l.classList.add('c');
+      l.style.left = (d * PX) + 'px'; frag.appendChild(l);
+    }
+  }
+  track.appendChild(frag);
+  let ticking = false;
+  const update = () => {
+    ticking = false;
+    const h = n360(60 + window.scrollY * .17);
+    track.style.transform = `translateX(${(tape.clientWidth / 2 - h * PX).toFixed(1)}px)`;
+    num.textContent = pad3(h) + '°';
+  };
+  window.addEventListener('scroll', () => { if (!ticking) { ticking = true; requestAnimationFrame(update); } }, { passive: true });
+  window.addEventListener('resize', update);
+  update();
+})();
+
+/* ============================================================
+   4) LÍNEA DE "CÓMO FUNCIONA" (se llena al bajar)
+   ============================================================ */
+(function () {
+  const box = $('#steps');
+  const upd = () => {
+    const r = box.getBoundingClientRect();
+    const p = clamp((innerHeight * .78 - r.top) / (r.height + innerHeight * .1), 0, 1);
+    box.style.setProperty('--p', p.toFixed(3));
+  };
+  window.addEventListener('scroll', upd, { passive: true }); window.addEventListener('resize', upd); upd();
+})();
+
+/* ============================================================
+   5) PESTAÑAS
+   ============================================================ */
+(function () {
+  const tabs = $$('[role=tab]');
+  const show = t => {
+    tabs.forEach(b => { const on = b === t; b.setAttribute('aria-selected', on); b.tabIndex = on ? 0 : -1; $('#' + b.getAttribute('aria-controls')).hidden = !on; });
+  };
+  tabs.forEach((b, i) => {
+    b.addEventListener('click', () => show(b));
+    b.addEventListener('keydown', e => {
+      const k = { ArrowRight: 1, ArrowLeft: -1 }[e.key]; if (!k) return;
+      const n = tabs[(i + k + tabs.length) % tabs.length]; show(n); n.focus(); e.preventDefault();
+    });
+  });
+})();
+
+/* ============================================================
+   6) CALCULADORA DE VIENTO
+   ============================================================ */
+const windCalc = (tc, tas, wd, ws) => {
+  const a = rad(wd - tc), ratio = ws / tas * Math.sin(a);
+  if (Math.abs(ratio) > 1) return { error: 'El viento cruzado es mayor que la velocidad del avión: no existe un rumbo que mantenga la ruta.' };
+  const wca = Math.asin(ratio);
+  const gs = tas * Math.cos(wca) - ws * Math.cos(a);
+  if (gs <= 0) return { error: 'Con ese viento de frente el avión no avanza sobre el suelo.' };
+  return { wca: deg(wca), hdg: n360(tc + deg(wca)), gs };
+};
+window.__windCalc = windCalc;
+
+(function () {
+  const ids = ['tc', 'tas', 'wd', 'ws', 'dist', 'burn'], v = {};
+  const g = $('#wind-g'), warn = $('#w-warn');
+  const vec = t => [Math.sin(rad(t)), -Math.cos(rad(t))];
+  const fmtTime = m => { const h = Math.floor(m / 60), mm = Math.round(m - h * 60); return mm === 60 ? `${h + 1}:00` : `${h}:${String(mm).padStart(2, '0')}`; };
+
+  function draw(res, tc, tas, wd, ws) {
+    g.innerHTML = '';
+    const W = 440, H = 300, m = 64;
+    const A0 = vec(res.hdg).map(x => x * tas);                       // vector del avión
+    const w = vec(wd + 180).map(x => x * ws);                        // viento: hacia donde sopla
+    const B0 = [A0[0] + w[0], A0[1] + w[1]];                         // vector sobre el suelo
+    const xs = [0, A0[0], B0[0]], ys = [0, A0[1], B0[1]];
+    const minx = Math.min(...xs), maxx = Math.max(...xs), miny = Math.min(...ys), maxy = Math.max(...ys);
+    const k = Math.min((W - 2 * m) / Math.max(maxx - minx, 1), (H - 2 * m) / Math.max(maxy - miny, 1));
+    const ox = W / 2 - ((minx + maxx) / 2) * k, oy = H / 2 - ((miny + maxy) / 2) * k;
+    const P = p => [ox + p[0] * k, oy + p[1] * k];
+    const O = P([0, 0]), A = P(A0), B = P(B0);
+    // referencia: norte
+    el('line', { x1: 34, y1: 58, x2: 34, y2: 22, stroke: '#7e98b3', 'stroke-width': 2, 'marker-end': 'url(#ar-gnd)' }, g);
+    const nt = el('text', { x: 34, y: 76, fill: '#9bb3cc', 'font-size': 14, 'text-anchor': 'middle', 'font-family': 'IBM Plex Sans,sans-serif' }, g); nt.textContent = 'N';
+    // ruta deseada (punteada, prolongada)
+    const dx = B[0] - O[0], dy = B[1] - O[1], len = Math.hypot(dx, dy) || 1;
+    el('line', { x1: O[0] - dx / len * 18, y1: O[1] - dy / len * 18, x2: B[0] + dx / len * 26, y2: B[1] + dy / len * 26, stroke: '#ffffff', 'stroke-opacity': .22, 'stroke-dasharray': '5 6' }, g);
+    // vectores
+    el('line', { x1: O[0], y1: O[1], x2: A[0], y2: A[1], stroke: '#4a9be0', 'stroke-width': 3.5, 'marker-end': 'url(#ar-air)' }, g);
+    if (ws > 0.5) el('line', { x1: A[0], y1: A[1], x2: B[0], y2: B[1], stroke: '#f0b429', 'stroke-width': 3.5, 'marker-end': 'url(#ar-wind)' }, g);
+    el('line', { x1: O[0], y1: O[1], x2: B[0], y2: B[1], stroke: '#fff', 'stroke-width': 3.5, 'marker-end': 'url(#ar-gnd)' }, g);
+    el('circle', { cx: O[0], cy: O[1], r: 5, fill: '#fff' }, g);
+    // etiquetas con valores
+    const lab = (p, q, txt, col) => {
+      const mx = (p[0] + q[0]) / 2, my = (p[1] + q[1]) / 2, ex = q[0] - p[0], ey = q[1] - p[1], l = Math.hypot(ex, ey) || 1;
+      const off = l < 70 ? 32 : 18;
+      let nx = -ey / l * off, ny = ex / l * off;
+      // empujar la etiqueta hacia afuera del triángulo
+      const cx = (O[0] + A[0] + B[0]) / 3, cy = (O[1] + A[1] + B[1]) / 3;
+      if ((mx + nx - cx) ** 2 + (my + ny - cy) ** 2 < (mx - nx - cx) ** 2 + (my - ny - cy) ** 2) { nx = -nx; ny = -ny; }
+      const half = txt.length * 4.4;                       // ancho aproximado del texto, para que no se corte
+      const tx = clamp(mx + nx, half + 8, W - half - 8), ty = clamp(my + ny + 5, 18, H - 12);
+      const t = el('text', { x: tx, y: ty, fill: col, 'font-size': 14, 'font-weight': 600, 'text-anchor': 'middle', 'font-family': 'IBM Plex Sans,sans-serif', stroke: '#0f2a45', 'stroke-width': 5, 'stroke-linejoin': 'round', 'paint-order': 'stroke' }, g); t.textContent = txt;
+    };
+    lab(O, A, `rumbo ${pad3(res.hdg)}° · ${Math.round(tas)} kt`, '#8fc3f2');
+    if (ws > 0.5) lab(A, B, `viento ${Math.round(ws)} kt`, '#f6cd6a');
+    lab(O, B, `ruta ${pad3(tc)}° · ${Math.round(res.gs)} kt`, '#ffffff');
+  }
+
+  function update() {
+    const tc = v.tc, tas = v.tas, wd = v.wd, ws = v.ws, dist = v.dist, burn = v.burn;
+    const res = windCalc(tc, tas, wd, ws);
+    if (res.error) {
+      warn.textContent = res.error; warn.classList.add('show');
+      ['hdg', 'gs', 'wca', 'time', 'fuel'].forEach(k => $('#o-' + k).textContent = '—'); g.innerHTML = ''; return;
+    }
+    warn.classList.remove('show');
+    $('#o-hdg').textContent = pad3(res.hdg) + '°';
+    $('#o-gs').innerHTML = Math.round(res.gs) + '<small>kt</small>';
+    const w = Math.round(Math.abs(res.wca));
+    $('#o-wca').innerHTML = w === 0 ? '0°' : w + '°<small>' + (res.wca > 0 ? 'a la derecha' : 'a la izquierda') + '</small>';
+    const min = dist / res.gs * 60;
+    $('#o-time').innerHTML = fmtTime(min) + '<small>h:min</small>';
+    $('#o-fuel').innerHTML = Math.round(min / 60 * burn) + '<small>litros</small>';
+    draw(res, tc, tas, wd, ws);
+  }
+
+  ids.forEach(id => {
+    const r = $('#r-' + id), n = $('#n-' + id);
+    const set = (val, from) => {
+      let x = parseFloat(val); if (!isFinite(x)) return;
+      if (id === 'tc' || id === 'wd') x = ((x % 360) + 360) % 360;
+      v[id] = x; if (from !== r) r.value = x; if (from !== n) n.value = Math.round(x * 10) / 10; update();
+    };
+    r.addEventListener('input', () => set(r.value, r));
+    n.addEventListener('input', () => { if (n.value !== '') set(n.value, n); });
+    n.addEventListener('blur', () => { n.value = v[id]; });
+    v[id] = parseFloat(n.value);
+  });
+  update();
+})();
+
+/* ============================================================
+   7) DECODIFICADOR DE METAR
+   ============================================================ */
+const WX = {
+  intens: { '-': 'ligera ', '+': 'fuerte ', 'VC': 'en las cercanías: ' },
+  desc: { TS: 'tormenta', SH: 'chaparrones de', FZ: 'engelante', BC: 'bancos de', MI: 'poco profunda', PR: 'parcial', DR: 'ventisca baja de', BL: 'ventisca alta de' },
+  ph: { RA: 'lluvia', DZ: 'llovizna', SN: 'nieve', SG: 'gránulos de nieve', GR: 'granizo', GS: 'granizo pequeño', FG: 'niebla', BR: 'neblina', HZ: 'calima', FU: 'humo', DU: 'polvo', SA: 'arena', VA: 'ceniza volcánica', SQ: 'turbonada', FC: 'tromba o tornado', PL: 'cristales de hielo', IC: 'cristales de hielo' },
+};
+const CLOUD = { FEW: 'Algunas nubes (1-2 octas)', SCT: 'Nubes dispersas (3-4 octas)', BKN: 'Cielo fragmentado (5-7 octas)', OVC: 'Cielo cubierto (8 octas)' };
+
+function parseMetar(txt) {
+  const tk = txt.trim().toUpperCase().split(/\s+/).filter(Boolean);
+  const o = { clouds: [], wx: [], notes: [] };
+  if (!tk.length) return null;
+  let i = 0;
+  if (/^(METAR|SPECI)$/.test(tk[i])) i++;
+  if (tk[i] === 'COR') i++;
+  if (/^[A-Z]{4}$/.test(tk[i] || '')) o.station = tk[i++];
+  for (; i < tk.length; i++) {
+    const t = tk[i]; let m;
+    if (t === 'RMK') break;
+    if ((m = t.match(/^(\d{2})(\d{2})(\d{2})Z$/))) { o.day = +m[1]; o.time = `${m[2]}:${m[3]} UTC`; continue; }
+    if (t === 'AUTO') { o.notes.push('Informe automático'); continue; }
+    if ((m = t.match(/^(VRB|\d{3})(\d{2,3})(?:G(\d{2,3}))?(KT|MPS)$/))) {
+      const f = m[4] === 'MPS' ? 1.94384 : 1;
+      o.wind = { dir: m[1] === 'VRB' ? null : +m[1], spd: Math.round(+m[2] * f), gust: m[3] ? Math.round(+m[3] * f) : null }; continue;
+    }
+    if ((m = t.match(/^(\d{3})V(\d{3})$/))) { o.windVar = [m[1], m[2]]; continue; }
+    if (t === 'CAVOK') { o.cavok = true; o.vis = 10000; continue; }
+    if ((m = t.match(/^(\d{4})$/))) { o.vis = +m[1]; continue; }
+    if ((m = t.match(/^(\d{1,2})SM$/))) { o.vis = Math.round(+m[1] * 1609); continue; }
+    if (/^(NOSIG|TEMPO|BECMG)$/.test(t)) { o.notes.push(t === 'NOSIG' ? 'Sin cambios significativos esperados' : 'Hay una tendencia a continuación (' + t + ')'); continue; }
+    if ((m = t.match(/^(FEW|SCT|BKN|OVC)(\d{3})(CB|TCU)?$/))) { o.clouds.push({ type: m[1], ft: +m[2] * 100, ext: m[3] || '' }); continue; }
+    if ((m = t.match(/^VV(\d{3})$/))) { o.vv = +m[1] * 100; continue; }
+    if (/^(NSC|SKC|CLR|NCD)$/.test(t)) { o.clear = true; continue; }
+    if ((m = t.match(/^(M?\d{2})\/(M?\d{2})?$/))) { const c = s => s ? (s[0] === 'M' ? -1 : 1) * +s.replace('M', '') : null; o.temp = c(m[1]); o.dew = c(m[2]); continue; }
+    if ((m = t.match(/^Q(\d{4})$/))) { o.qnh = +m[1]; continue; }
+    if ((m = t.match(/^A(\d{4})$/))) { o.qnh = Math.round(+m[1] / 100 * 33.8639); o.inHg = true; continue; }
+    if ((m = t.match(/^(\+|-|VC)?((?:[A-Z]{2}){1,4})$/))) {
+      const codes = m[2].match(/.{2}/g);
+      if (codes.every(c => WX.desc[c] || WX.ph[c])) {
+        const words = codes.map(c => WX.desc[c] || WX.ph[c]);
+        o.wx.push(((m[1] && WX.intens[m[1]]) || '') + words.join(' '));
+        continue;
+      }
+    }
+  }
+  return o;
+}
+
+function renderMetar(o, rwy) {
+  const out = $('#metar-out');
+  if (!o || (!o.station && !o.wind && o.vis == null && o.temp == null)) {
+    out.innerHTML = '<div class="rw"><dt class="err">No pude leer el informe</dt><dd>Pegá un METAR completo, por ejemplo: SAEZ 311500Z 18008KT CAVOK 24/11 Q1016</dd></div>'; return;
+  }
+  const rows = [];
+  if (o.station) rows.push(['Aeródromo', `<b class="mono">${esc(o.station)}</b>`]);
+  if (o.time) rows.push(['Hora', `Día ${o.day}, ${o.time}`]);
+  if (o.wind) {
+    let w;
+    if (o.wind.spd === 0) w = 'Calmo';
+    else w = (o.wind.dir == null ? 'Variable' : `Desde los ${pad3(o.wind.dir)}°`) + `, ${o.wind.spd} kt` + (o.wind.gust ? `, con ráfagas de ${o.wind.gust} kt` : '');
+    if (o.windVar) w += ` (varía entre ${o.windVar[0]}° y ${o.windVar[1]}°)`;
+    rows.push(['Viento', esc(w)]);
+    if (rwy != null && o.wind.dir != null && o.wind.spd > 0) {
+      const a = rad(o.wind.dir - rwy), spd = o.wind.gust || o.wind.spd;
+      const head = Math.round(o.wind.spd * Math.cos(a)), cross = Math.round(Math.abs(o.wind.spd * Math.sin(a)));
+      const side = Math.sin(a) > 0 ? 'derecha' : 'izquierda';
+      rows.push(['Con la pista ' + pad3(rwy) + '°', `${head >= 0 ? 'Viento de frente' : 'Viento de cola'} de ${Math.abs(head)} kt y cruzado de ${cross} kt desde la ${side}` + (o.wind.gust ? `. Con ráfagas (${spd} kt) el cruzado llega a ${Math.round(Math.abs(spd * Math.sin(a)))} kt.` : '.')]);
+    }
+  }
+  if (o.vis != null) rows.push(['Visibilidad', o.cavok ? 'CAVOK: 10 km o más, sin nubes bajas ni fenómenos significativos' : (o.vis >= 9999 ? '10 km o más' : (o.vis >= 1000 ? (o.vis / 1000).toFixed(1).replace('.0', '').replace('.', ',') + ' km' : o.vis + ' m'))]);
+  if (o.wx.length) rows.push(['Fenómenos', esc(o.wx.map(s => s.charAt(0).toUpperCase() + s.slice(1)).join('; '))]);
+  if (o.vv != null) rows.push(['Nubes', `Cielo oscurecido: visibilidad vertical de ${o.vv} ft`]);
+  else if (o.clouds.length) rows.push(['Nubes', o.clouds.map(c => `${CLOUD[c.type]} a ${c.ft.toLocaleString('es-AR')} ft${c.ext === 'CB' ? ', cumulonimbus' : c.ext === 'TCU' ? ', cúmulos en desarrollo' : ''}`).map(esc).join('<br>')]);
+  else if (o.cavok || o.clear) rows.push(['Nubes', 'Sin nubes significativas']);
+  if (o.temp != null) rows.push(['Temperatura', `${o.temp} °C` + (o.dew != null ? ` · punto de rocío ${o.dew} °C` : '')]);
+  if (o.temp != null && o.dew != null && o.temp - o.dew <= 3) rows.push(['Humedad', 'Temperatura y punto de rocío muy cerca: hay riesgo de niebla o nubes bajas.']);
+  if (o.qnh != null) rows.push(['QNH', `${o.qnh} hPa` + (o.inHg ? ' (convertido desde pulgadas de mercurio)' : '')]);
+  // categoría de vuelo (referencia general)
+  const ceilings = o.clouds.filter(c => c.type === 'BKN' || c.type === 'OVC').map(c => c.ft); if (o.vv != null) ceilings.push(o.vv);
+  const ceil = ceilings.length ? Math.min(...ceilings) : Infinity, vis = o.vis == null ? Infinity : o.vis;
+  if (o.vis != null || ceilings.length || o.cavok) {
+    let cat = 'VFR', cls = 'b-vfr', txt = 'Condiciones visuales';
+    if (vis < 1600 || ceil < 500) { cat = 'LIFR'; cls = 'b-lifr'; txt = 'Muy por debajo de las mínimas visuales'; }
+    else if (vis < 5000 || ceil < 1000) { cat = 'IFR'; cls = 'b-ifr'; txt = 'Por debajo de las mínimas visuales'; }
+    else if (vis < 8000 || ceil <= 3000) { cat = 'MVFR'; cls = 'b-mvfr'; txt = 'Visuales marginales'; }
+    rows.push(['Categoría', `<span class="badge ${cls}">${cat}</span> ${txt}`]);
+  }
+  o.notes.forEach(n => rows.push(['Nota', esc(n)]));
+  out.innerHTML = rows.map(r => `<div class="rw"><dt>${r[0]}</dt><dd>${r[1]}</dd></div>`).join('');
+}
+window.__parseMetar = parseMetar;
+
+(function () {
+  const inp = $('#metar-in'), rwy = $('#rwy');
+  const go = () => renderMetar(parseMetar(inp.value), rwy.value === '' ? null : n360(parseFloat(rwy.value)));
+  inp.addEventListener('input', go); rwy.addEventListener('input', go);
+  $$('.chip').forEach(c => c.addEventListener('click', () => { inp.value = c.dataset.metar; go(); }));
+  go();
+})();
+
+/* ============================================================
+   8) MINI EXAMEN
+   ============================================================ */
+(function () {
+  const Q = [
+    { q: 'Un viento que sopla desde los 270°, ¿de qué dirección viene?', o: ['Del este', 'Del oeste', 'Del norte', 'Del sur'], a: 1,
+      e: 'El viento se nombra por el lugar de donde viene. 270° es el oeste, así que es un viento del oeste: te empuja hacia el este.' },
+    { q: '¿Qué indica el altímetro cuando tiene calado el QNH de un aeródromo y el avión está en tierra?', o: ['Cero, siempre', 'La elevación del aeródromo sobre el nivel medio del mar', 'La altura sobre el terreno que sobrevuela', 'La altitud de presión'], a: 1,
+      e: 'Con el QNH calado, el altímetro marca la altitud sobre el nivel medio del mar. En tierra, eso es la elevación del aeródromo.' },
+    { q: '¿Qué provoca la pérdida de sustentación?', o: ['Superar el ángulo crítico de ataque', 'Volar por debajo de cierta altura', 'Tener el flap extendido', 'Un viento de frente muy fuerte'], a: 0,
+      e: 'La pérdida depende del ángulo de ataque, no de la velocidad ni de la actitud. Pasado el ángulo crítico, el flujo se desprende del ala y la sustentación cae de golpe.' },
+    { q: 'Con viento cruzado desde la derecha, ¿hacia dónde corregís el rumbo para mantener la ruta?', o: ['Hacia la izquierda, alejándote del viento', 'Hacia la derecha, hacia el viento', 'No hace falta corregir', 'Depende solo de la altura'], a: 1,
+      e: 'Se apunta la nariz hacia el lado de donde viene el viento. Es la corrección de deriva que calcula la herramienta de arriba.' },
+  ];
+  const box = $('#quiz');
+  let i = 0, score = 0, res = [];
+  function dots() { return `<div class="dots" aria-hidden="true">${Q.map((_, k) => `<i class="${res[k] === true ? 'ok' : res[k] === false ? 'no' : k === i ? 'on' : ''}"></i>`).join('')}</div>`; }
+  function ask() {
+    const q = Q[i];
+    box.innerHTML = `<div class="q-top"><span>Pregunta ${i + 1} de ${Q.length}</span>${dots()}</div>
+      <div class="q-text" id="q-t">${esc(q.q)}</div>
+      <div class="opts" role="group" aria-labelledby="q-t">${q.o.map((t, k) => `<button class="opt" data-k="${k}"><b>${'ABCD'[k]}</b><span>${esc(t)}</span></button>`).join('')}</div>
+      <div class="explain" id="q-e" role="status"></div>
+      <div class="q-actions" id="q-a"></div>`;
+    $$('.opt', box).forEach(b => b.addEventListener('click', () => pick(+b.dataset.k)));
+  }
+  function pick(k) {
+    const q = Q[i], ok = k === q.a;
+    res[i] = ok; if (ok) score++;
+    $$('.opt', box).forEach((b, n) => { b.disabled = true; if (n === q.a) b.classList.add('right'); else if (n === k) b.classList.add('wrong'); });
+    const e = $('#q-e'); e.innerHTML = `<b>${ok ? 'Correcto.' : 'No es esa.'}</b> ${esc(q.e)}`; e.classList.add('show');
+    $('.dots', box).outerHTML = dots();
+    const last = i === Q.length - 1;
+    $('#q-a').innerHTML = `<button class="btn btn-primary" id="q-n">${last ? 'Ver mi resultado' : 'Siguiente pregunta'}</button>`;
+    const nb = $('#q-n'); nb.addEventListener('click', () => { if (last) done(); else { i++; ask(); } }); nb.focus();
+  }
+  function done() {
+    const msg = score === Q.length ? 'Excelente. Estás para pasar a las lecciones avanzadas.' : score >= Q.length - 1 ? 'Muy bien. Repasá el punto que fallaste en las lecciones.' : 'Un buen punto de partida. Las lecciones están pensadas justo para esto.';
+    box.innerHTML = `<div class="q-top"><span>Resultado</span>${dots()}</div>
+      <div class="score">${score}<span style="font-size:2.4rem;color:#7e98b3"> / ${Q.length}</span></div>
+      <p style="font-size:1.15rem;color:#cfe0f2;margin:.8rem 0 1.6rem">${msg}</p>
+      <div class="q-actions"><a class="btn btn-primary" href="index.html">Crear mi cuenta</a><button class="btn btn-light" id="q-r">Repetir el examen</button></div>`;
+    $('#q-r').addEventListener('click', () => { i = 0; score = 0; res = []; ask(); });
+  }
+  ask();
+})();
+
+})();
+</script>
+</body>
+</html>
